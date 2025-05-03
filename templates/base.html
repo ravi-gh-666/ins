@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Insurance Policy Scorecard{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* ...existing CSS from index.html... */
+        body {
+            font-family: 'Roboto', 'Open Sans', Arial, sans-serif;
+            font-size: 1.12rem;
+            line-height: 1.6;
+            color: #222;
+            padding-top: 60px;
+        }
+        h1, .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .card, .container {
+            font-size: 1.08rem;
+        }
+        button, select, input {
+            font-size: 1rem;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+        }
+        .header {
+            background: #d50060;
+            color: #fff;
+            padding: 32px 0 20px 0;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 28px;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 28px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            background: #fff;
+        }
+        .feature-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+        }
+        .feature-icon {
+            font-size: 1.3em;
+            margin-right: 8px;
+            color: #1976d2;
+        }
+        .mandatory-badge {
+            background: #43a047;
+            color: #fff;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.95em;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+        .tag {
+            font-weight: bold;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .green { background-color: #43a047; }
+        .orange { background-color: #ffa000; }
+        .red { background-color: #e53935; }
+        .explanation {
+            font-size: 1em;
+            margin: 8px 0 0 0;
+        }
+        .details, .caveats {
+            font-size: 0.98em;
+            margin: 4px 0 0 0;
+        }
+        .caveats { color: #e53935; }
+        .why-matters {
+            color: #1976d2;
+            font-size: 0.98em;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        .action-btn {
+            display: block;
+            margin: 32px auto 0 auto;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 32px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .action-btn:hover {
+            background: #125ea2;
+        }
+        .score-ring {
+            position: relative;
+            width: 54px;
+            height: 54px;
+            display: inline-block;
+            margin: 0 4px;
+            vertical-align: middle;
+        }
+        .score-ring svg {
+            transform: rotate(-90deg);
+        }
+        .score-ring .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #222;
+        }
+        @media (max-width: 900px) {
+            .container {
+                padding: 10px;
+            }
+            .card {
+                padding: 14px;
+            }
+            .header {
+                padding: 20px 0 12px 0;
+            }
+        }
+        @media (max-width: 700px) {
+            .container {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .header h1 {
+                font-size: 1.3em;
+            }
+            .card {
+                margin-bottom: 18px;
+                padding: 10px;
+            }
+            .feature-title {
+                font-size: 1em;
+            }
+            .action-btn {
+                width: 100%;
+                font-size: 1em;
+                padding: 12px 0;
+            }
+            /* Stack insurer details and scores vertically */
+            .insurer-flex {
+                flex-direction: column !important;
+                gap: 18px;
+            }
+            .insurer-flex > div {
+                width: 100% !important;
+                min-width: 0 !important;
+                margin-left: 0 !important;
+            }
+        }
+        .topbar {
+            width: 100%;
+            background: #22223b;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            height: 60px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .topbar .logo {
+            font-size: 1.4em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .topbar-nav {
+            display: flex;
+            gap: 32px;
+        }
+        .topbar-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.08em;
+            font-weight: 500;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-bottom 0.2s;
+        }
+        .topbar-nav a.active,
+        .topbar-nav a:hover {
+            color: #d50060;
+            border-bottom: 2px solid #d50060;
+        }
+        @media (max-width: 700px) {
+            .topbar {
+                flex-direction: column;
+                height: auto;
+                padding: 0 10px;
+            }
+            .topbar-nav {
+                gap: 18px;
+                margin-top: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <a href="/" class="logo">Insurance Portal</a>
+        <nav class="topbar-nav">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+            <a href="/scorecard" class="{% if request.path.startswith('/scorecard') %}active{% endif %}">Scorecard</a>
+            <a href="/compare" class="{% if request.path.startswith('/compare') %}active{% endif %}">Compare</a>
+            <a href="/contact" class="{% if request.path.startswith('/contact') %}active{% endif %}">Contact Us</a>
+        </nav>
+    </div>
+    {% macro score_ring(value) %}
+        {% set color = '#e53935' if value <= 5 else '#ffa000' if value < 8 else '#43a047' %}
+        {% set percent = (value / 10) * 100 %}
+        <span class="score-ring">
+            <svg width="54" height="54">
+                <circle cx="27" cy="27" r="24" fill="none" stroke="#eee" stroke-width="6"/>
+                <circle cx="27" cy="27" r="24" fill="none" stroke="{{ color }}" stroke-width="6"
+                    stroke-dasharray="{{ 2 * 3.1416 * 24 }}"
+                    stroke-dashoffset="{{ (1 - percent / 100) * 2 * 3.1416 * 24 }}"
+                    stroke-linecap="round"/>
+            </svg>
+            <span class="score-text">{{ value }}</span>
+        </span>
+    {% endmacro %}
+    {% block content %}{% endblock %}
+</body>
+</html>

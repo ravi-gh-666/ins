@@ -1,0 +1,162 @@
+{
+    "InsurerDetails": {
+        "InsurancePolicy": "Optima Secure",
+        "Insurer": "HDFC Ergo",
+        "ThreeYearAverageCSR": {
+            "Value": "80%",
+            "Tag": "Decent (≥80%)"
+        },
+        "NetworkHospitals": {
+            "Value": ">15,000",
+            "Tag": "Good (≥8,000)"
+        },
+        "VolumeOfComplaints": {
+            "Value": "6.80 per 10,000 policies",
+            "Tag": "Good (<10 per 10,000 policies)"
+        },
+        "SolvencyRatio": {
+            "Value": "1.89",
+            "Tag": "Good (>1.80)"
+        },
+        "PayOutRatio": {
+            "Value": "92%",
+            "Tag": "Good (>90%)"
+        },
+        "RevenueRanking": "5th largest general insurer in India",
+        "OnlineClaimTracking": "Yes",
+        "AverageCashlessSettlementTime": "40 mins",
+        "AverageNonCashlessSettlementTime": "3 days"
+    },
+    "PolicyFeatures": [
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "No Co-Pay",
+            "FeatureOffered": "No",
+            "Category": "Mandatory",
+            "Explanation": "Ensures that you do not share any cost during hospitalization as the insurer covers the entire expense up to the sum insured.",
+            "Details": "For Optima Secure, hospitalization expenses are fully covered with no co-payment required by the policyholder.",
+            "Caveats": "Applies only to hospitalization expenses as per policy limits. Outpatient services, non-hospitalization charges, or elective treatments may be excluded. Review the official policy wording for detailed conditions."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "No Room Rent Restriction",
+            "FeatureOffered": "Yes",
+            "Category": "Mandatory",
+            "Explanation": "Allows you to choose any hospital room without a pre-defined cap on room rent charges.",
+            "Details": "Optima Secure does not impose a fixed limit on room rent, enabling you to select from a variety of room types.",
+            "Caveats": "Reimbursement is subject to the actual billed amount up to the sum insured. Charges at non-empaneled hospitals or rates exceeding standard tariffs might be adjusted per policy terms."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "No Disease Wise Sub-limits",
+            "FeatureOffered": "Yes",
+            "Category": "Mandatory",
+            "Explanation": "Provides full cover irrespective of the disease, meaning your entire sum insured is available without slicing limits by disease.",
+            "Details": "This feature ensures that no matter the illness, you're eligible for the full claim amount (subject to overall limits).",
+            "Caveats": "Certain high-cost treatments or procedures may still have sub-limits as specified in the policy document. Always refer to the policy wording for exclusions or specific limits."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Low PED Waiting Period",
+            "FeatureOffered": "Yes",
+            "Category": "Mandatory",
+            "Explanation": "Reduces the waiting time for coverage of pre‑existing conditions compared to standard policies.",
+            "Details": "For Optima Secure, the waiting period is lower than typical norms, facilitating quicker coverage for pre‑existing diseases.",
+            "Caveats": "The waiting period may vary based on the disease or its severity. Some long‑term or aggravated conditions may attract a longer waiting period as per policy conditions."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Pre and Post-Hospitalization Care",
+            "FeatureOffered": "Yes",
+            "Category": "Mandatory",
+            "Explanation": "Covers expenses incurred before hospital admission and after discharge, protecting you from additional costs.",
+            "Details": "For this policy, up to 60 days prior to admission and 180 days after discharge expenses are covered subject to sub‑limits.",
+            "Caveats": "Expenses outside the specified periods or non‑medical related expenses may be excluded. Sub‑limits may apply as specified in the policy documentation."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Coverage for Daycare Treatments",
+            "FeatureOffered": "Yes",
+            "Category": "Mandatory",
+            "Explanation": "Provides cover for procedures that require less than 24 hours of hospitalization, such as minor surgeries or therapies.",
+            "Details": "Optima Secure includes coverage for procedures done on a daycare basis, ensuring you are covered even for treatments not involving an overnight stay.",
+            "Caveats": "If the observation period extends beyond 24 hours due to complications, the claim may be treated as full hospitalization with applicable conditions."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Restoration Benefit",
+            "FeatureOffered": "Yes",
+            "Category": "Mandatory",
+            "Explanation": "Restores your sum insured after a claim, allowing you to claim again during the policy period.",
+            "Details": "For Optima Secure, after a claim is made, the sum insured can be restored up to 100% subject to policy conditions.",
+            "Caveats": "Restoration may be subject to frequency limits or specific conditions, such as exclusions on multiple high‑cost claims. Refer to the brochure for limitations and detailed terms."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Bonus for No Claim",
+            "FeatureOffered": "Yes",
+            "Category": "Mandatory",
+            "Explanation": "Rewards claim‑free years by increasing the sum insured.",
+            "Details": "Each claim‑free year may result in an increase (for example, up to 50% annually) in the sum insured for Optima Secure.",
+            "Caveats": "The bonus is generally capped and may reset upon making a claim. Specific multipliers and maximum bonus amounts are detailed in the policy schedule."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Free Health Checkups",
+            "FeatureOffered": "Yes",
+            "Category": "Good To Have",
+            "Explanation": "Offers a complimentary comprehensive health checkup annually to encourage proactive health management.",
+            "Details": "The policy covers one comprehensive health checkup per policy year through designated empaneled providers.",
+            "Caveats": "This benefit could be subject to network restrictions or exclusions if an aggregate deductible is applicable. Check the policy wording for any conditions."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Cover for Consumables",
+            "FeatureOffered": "Yes",
+            "Category": "Good To Have",
+            "Explanation": "Provides reimbursement for consumable items such as gloves, syringes, and PPE kits used during treatment.",
+            "Details": "Consumables used during hospitalization are included in the claim under the policy.",
+            "Caveats": "Individual item limits may apply and the reimbursement is subject to overall claim ceilings as defined in the policy."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Domiciliary Coverage",
+            "FeatureOffered": "Yes",
+            "Category": "Good To Have",
+            "Explanation": "Extends coverage to treatment received at home when hospitalization is not feasible due to bed unavailability or mobility issues.",
+            "Details": "Home treatment expenses, including medical equipment rental and practitioner fees, are covered under this feature.",
+            "Caveats": "Domiciliary claims require pre‑certification and adherence to specific policy conditions. Frequent claims may be subject to additional review."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Cover for Alternative Treatments",
+            "FeatureOffered": "Yes",
+            "Category": "Good To Have",
+            "Explanation": "Includes coverage for alternative treatment methods such as Ayurveda, Homeopathy, and Siddha.",
+            "Details": "Alternative treatments are covered up to the sum insured when provided by empaneled centers under the policy.",
+            "Caveats": "Duration, frequency, and specific treatment exclusions may apply. Only approved alternative treatments are covered as per policy terms."
+        },
+        {
+            "InsurancePolicy": "Optima Secure",
+            "Insurer": "HDFC Ergo",
+            "FeatureName": "Maternity Benefits",
+            "FeatureOffered": "Yes",
+            "Category": "Good To Have",
+            "Explanation": "Provides coverage for maternity‑related expenses including childbirth and associated care.",
+            "Details": "Optima Secure covers maternity expenses subject to the sum insured and benefit limits specified in the policy.",
+            "Caveats": "Maternity benefits are subject to a waiting period (typically 2–4 years) and may have sub‑limits on certain costs. Emergency cases or complications may be treated differently. Refer to the detailed policy terms for conditions."
+        }
+    ]
+}

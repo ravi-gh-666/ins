@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="header">
+            <h1>Insurance Policy Scorecard</h1>
+            <form method="post">
+                {{ form.hidden_tag() }}
+                {{ form.insurer.label }} {{ form.insurer(onchange="this.form.submit()") }}
+                {{ form.policy.label }} {{ form.policy(onchange="this.form.submit()") }}
+            </form>
+        </div>
+        {% if policy_data['InsurerDetails'] %}
+        <div class="card">
+            <div class="insurer-flex" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <h2>{{ policy_data['InsurerDetails']['InsurancePolicy'] }} by {{ policy_data['InsurerDetails']['Insurer'] }}</h2>
+                    <p><strong>3 Year Average CSR:</strong> {{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Value'] }}
+                        <span class="tag {{ get_score_color(policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag']) }}">
+                            {{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag'] }}
+                        </span>
+                    </p>
+                    <p><strong>Network Hospitals:</strong> {{ policy_data['InsurerDetails']['NetworkHospitals']['Value'] }}
+                        <span class="tag {{ get_score_color(policy_data['InsurerDetails']['NetworkHospitals']['Tag']) }}">
+                            {{ policy_data['InsurerDetails']['NetworkHospitals']['Tag'] }}
+                        </span>
+                    </p>
+                    <p><strong>Volume of Complaints:</strong> {{ policy_data['InsurerDetails']['VolumeOfComplaints']['Value'] }}
+                        <span class="tag {{ get_score_color(policy_data['InsurerDetails']['VolumeOfComplaints']['Tag']) }}">
+                            {{ policy_data['InsurerDetails']['VolumeOfComplaints']['Tag'] }}
+                        </span>
+                    </p>
+                    <p><strong>Solvency Ratio:</strong> {{ policy_data['InsurerDetails']['SolvencyRatio']['Value'] }}
+                        <span class="tag {{ get_score_color(policy_data['InsurerDetails']['SolvencyRatio']['Tag']) }}">
+                            {{ policy_data['InsurerDetails']['SolvencyRatio']['Tag'] }}
+                        </span>
+                    </p>
+                    <p><strong>Pay-Out Ratio:</strong> {{ policy_data['InsurerDetails']['PayOutRatio']['Value'] }}
+                        <span class="tag {{ get_score_color(policy_data['InsurerDetails']['PayOutRatio']['Tag']) }}">
+                            {{ policy_data['InsurerDetails']['PayOutRatio']['Tag'] }}
+                        </span>
+                    </p>
+                </div>
+                {% if scores %}
+                <div style="min-width:220px; margin-left:32px;">
+                    <div style="background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.07); padding:18px 12px; text-align:center;">
+                        <div style="font-weight:600; margin-bottom:10px; color:#222;">Policy Scores</div>
+                        {% set score_items = [
+                            ('Overall', scores['overall_score']),
+                            ('Insurer', scores['insurer_rating']),
+                            ('Features', scores['feature_rating']),
+                            ('Affordability', scores['affordability_rating'])
+                        ] %}
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                        {% for label, value in score_items %}
+                            <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px;">
+                                <span style="font-size:1em; color:#555; min-width:90px; text-align:right; font-weight:700;">{{ label }}</span>
+                                {{ score_ring(value) }}
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card">
+            <h2>Policy Features</h2>
+            <h3>Mandatory Features</h3>
+            {% for feature in mandatory_features %}
+                <div class="card">
+                    <div class="feature-title">
+                        <span class="material-icons feature-icon">verified_user</span>
+                        {{ feature['FeatureName'] }}
+                    </div>
+                    <p><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }}">{{ feature['FeatureOffered'] }}</span></p>
+                    <div class="explanation">{{ feature['Explanation'] }}</div>
+                    <div class="details"><strong>Details:</strong> {{ feature['Details'] }}</div>
+                    <div class="why-matters"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
+                    <div class="caveats"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
+                </div>
+            {% endfor %}
+            <h3>Good To Have Features</h3>
+            {% for feature in good_features %}
+                <div class="card">
+                    <div class="feature-title">
+                        <span class="material-icons feature-icon">star_rate</span>
+                        {{ feature['FeatureName'] }}
+                    </div>
+                    <p><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }}">{{ feature['FeatureOffered'] }}</span></p>
+                    <div class="explanation">{{ feature['Explanation'] }}</div>
+                    <div class="details"><strong>Details:</strong> {{ feature['Details'] }}</div>
+                    <div class="why-matters"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
+                    <div class="caveats"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
+                </div>
+            {% endfor %}
+            <button class="action-btn">Get Quote</button>
+        </div>
+        {% else %}
+        <div class="card" style="text-align:center; color:#e53935; font-weight:600;">
+            No policy available for the selected insurer.
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

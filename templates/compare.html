@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="card" style="background:#d50060; color:#fff; text-align:center; font-size:1.5em; font-weight:600; margin-bottom:32px;">
+        Compare Health Insurance Policies
+    </div>
+    <form method="POST" action="/compare" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: flex-end;" autocomplete="off">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div style="flex:1; min-width:260px;">
+            <h2>Policy 1</h2>
+            <label for="insurer1">Select Insurer:</label>
+            <select name="insurer1" id="insurer1" required aria-label="Select Insurer for Policy 1">
+                {% for insurer in insurers %}
+                    <option value="{{ insurer.id }}" {% if request.form.insurer1|default('')|string == insurer.id|string %}selected{% endif %}>{{ insurer.name }}</option>
+                {% endfor %}
+            </select>
+            <label for="policy1">Select Policy:</label>
+            <select name="policy1" id="policy1" required aria-label="Select Policy 1">
+                <!-- Policies for insurer 1 will be loaded dynamically -->
+            </select>
+        </div>
+        <div style="flex:1; min-width:260px;">
+            <h2>Policy 2</h2>
+            <label for="insurer2">Select Insurer:</label>
+            <select name="insurer2" id="insurer2" required aria-label="Select Insurer for Policy 2">
+                {% for insurer in insurers %}
+                    <option value="{{ insurer.id }}" {% if request.form.insurer2|default('')|string == insurer.id|string %}selected{% endif %}>{{ insurer.name }}</option>
+                {% endfor %}
+            </select>
+            <label for="policy2">Select Policy:</label>
+            <select name="policy2" id="policy2" required aria-label="Select Policy 2">
+                <!-- Policies for insurer 2 will be loaded dynamically -->
+            </select>
+        </div>
+        <div style="flex-basis:100%; text-align:center; margin-top:24px;">
+            <button type="submit" class="action-btn" id="compare-btn" style="background:#d50060; color:#fff; font-size:1.1em; padding:12px 36px; border-radius:6px; font-weight:600;" disabled>Compare</button>
+        </div>
+    </form>
+    <div style="margin:32px 0 0 0;">
+        <h2 style="font-size:1.2rem; font-weight:600; margin-bottom:16px;">Popular Policy Comparisons</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:24px;">
+            {% for left, right in popular_comparisons %}
+            <div class="card" style="flex:1 1 320px; min-width:300px; max-width:400px; display:flex; flex-direction:column; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+                <div style="display:flex; align-items:center; justify-content:center; width:100%; gap:18px; margin-bottom:8px;">
+                    <div style="text-align:center;">
+                        <div style="margin-bottom:4px;">
+                            {{ score_ring(left['overall_score']) }}
+                        </div>
+                        <div style="font-weight:600;">{{ left['insurer'] }}<br>{{ left['name'] }}</div>
+                    </div>
+                    <div style="font-size:1.5em; color:#aaa; font-weight:700;">vs</div>
+                    <div style="text-align:center;">
+                        <div style="margin-bottom:4px;">
+                            {{ score_ring(right['overall_score']) }}
+                        </div>
+                        <div style="font-weight:600;">{{ right['insurer'] }}<br>{{ right['name'] }}</div>
+                    </div>
+                </div>
+                <div style="width:100%; text-align:center; font-size:1em; color:#555; border-top:1px solid #eee; padding-top:8px;">
+                    {{ left['insurer'] }} {{ left['name'] }} <span style="background:#eee; color:#888; border-radius:12px; padding:2px 10px; font-size:0.95em; margin:0 6px;">vs</span> {{ right['insurer'] }} {{ right['name'] }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% if policy1 and policy2 %}
+    <div id="compare-result" style="margin-top:40px;">
+      <h2 style="text-align:center; margin-bottom:24px;">Policy Comparison</h2>
+      <table style="width:100%; border-collapse:collapse; font-size:1.08rem;">
+        <thead>
+          <tr style="background:#f5f5f5;">
+            <th style="padding:12px 8px; text-align:left;">Feature</th>
+            <th style="padding:12px 8px; text-align:center;">
+              <div style="font-size:1.1em; font-weight:700;">{{ policy1['name'] }}</div>
+              <div style="font-size:0.95em; color:#555;">{{ policy1['insurer'] }}</div>
+            </th>
+            <th style="padding:12px 8px; text-align:center;">
+              <div style="font-size:1.1em; font-weight:700;">{{ policy2['name'] }}</div>
+              <div style="font-size:0.95em; color:#555;">{{ policy2['insurer'] }}</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#fafafa;">
+            <td style="font-weight:600;">Overall Score</td>
+            <td style="text-align:center;">{{ score_ring(policy1['overall_score']) }}</td>
+            <td style="text-align:center;">{{ score_ring(policy2['overall_score']) }}</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Insurer Rating</td>
+            <td style="text-align:center;">{{ score_ring(policy1['insurer_rating']) }}</td>
+            <td style="text-align:center;">{{ score_ring(policy2['insurer_rating']) }}</td>
+          </tr>
+          <tr style="background:#fafafa;">
+            <td style="font-weight:600;">Feature Rating</td>
+            <td style="text-align:center;">{{ score_ring(policy1['feature_rating']) }}</td>
+            <td style="text-align:center;">{{ score_ring(policy2['feature_rating']) }}</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">Affordability</td>
+            <td style="text-align:center;">{{ score_ring(policy1['affordability_rating']) }}</td>
+            <td style="text-align:center;">{{ score_ring(policy2['affordability_rating']) }}</td>
+          </tr>
+          {% for feature in all_features %}
+          <tr style="background:{{ loop.index0 % 2 == 0 and '#fafafa' or '#fff' }};">
+            <td>{{ feature }}</td>
+            <td style="text-align:center;">
+              {% if features1[feature] is defined %}
+                <span class="tag {{ get_score_color(features1[feature]) }}">{{ features1[feature] }}</span>
+              {% else %}
+                <span style="color:#aaa;">—</span>
+              {% endif %}
+            </td>
+            <td style="text-align:center;">
+              {% if features2[feature] is defined %}
+                <span class="tag {{ get_score_color(features2[feature]) }}">{{ features2[feature] }}</span>
+              {% else %}
+                <span style="color:#aaa;">—</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+</div>
+<script>
+function loadPolicies(insurerSelectId, policySelectId, selectedPolicyId) {
+    const insurerId = document.getElementById(insurerSelectId).value;
+    fetch(`/api/policies/${insurerId}`)
+        .then(response => response.json())
+        .then(policies => {
+            const policySelect = document.getElementById(policySelectId);
+            policySelect.innerHTML = "";
+            policies.forEach(p => {
+                const opt = document.createElement("option");
+                opt.value = p.id;
+                opt.textContent = p.name;
+                if (selectedPolicyId && selectedPolicyId == p.id) {
+                    opt.selected = true;
+                }
+                policySelect.appendChild(opt);
+            });
+        });
+}
+
+function checkCompareBtn() {
+    const p1 = document.getElementById('policy1').value;
+    const p2 = document.getElementById('policy2').value;
+    document.getElementById('compare-btn').disabled = !(p1 && p2);
+}
+
+window.addEventListener("DOMContentLoaded", function() {
+    // Retain selection after POST
+    const selectedInsurer1 = "{{ request.form.insurer1|default('') }}";
+    const selectedPolicy1 = "{{ request.form.policy1|default('') }}";
+    const selectedInsurer2 = "{{ request.form.insurer2|default('') }}";
+    const selectedPolicy2 = "{{ request.form.policy2|default('') }}";
+    if (selectedInsurer1) document.getElementById('insurer1').value = selectedInsurer1;
+    if (selectedInsurer2) document.getElementById('insurer2').value = selectedInsurer2;
+    loadPolicies("insurer1", "policy1", selectedPolicy1);
+    loadPolicies("insurer2", "policy2", selectedPolicy2);
+    document.getElementById("insurer1").addEventListener("change", function() {
+        loadPolicies("insurer1", "policy1");
+        setTimeout(checkCompareBtn, 100);
+    });
+    document.getElementById("insurer2").addEventListener("change", function() {
+        loadPolicies("insurer2", "policy2");
+        setTimeout(checkCompareBtn, 100);
+    });
+    document.getElementById("policy1").addEventListener("change", checkCompareBtn);
+    document.getElementById("policy2").addEventListener("change", checkCompareBtn);
+    setTimeout(checkCompareBtn, 200);
+});
+</script>
+{% endblock %}
