@@ -108,35 +108,47 @@ def scorecard():
 
 @app.route("/compare", methods=["GET", "POST"])
 def compare():
+    import sys
+    print("[DEBUG] compare route called", file=sys.stderr)
     conn = get_db_connection()
     insurers = conn.execute("SELECT * FROM insurer").fetchall()
     policy1 = policy2 = features1 = features2 = None
     all_features = []
     error = None
     if request.method == "POST":
+        print("[DEBUG] POST data:", dict(request.form), file=sys.stderr)
         policy1_id = request.form.get("policy1")
         policy2_id = request.form.get("policy2")
         insurer1_id = request.form.get("insurer1")
         insurer2_id = request.form.get("insurer2")
+        print(f"[DEBUG] policy1_id={policy1_id}, policy2_id={policy2_id}, insurer1_id={insurer1_id}, insurer2_id={insurer2_id}", file=sys.stderr)
         # Validate both policies are selected
         if not policy1_id or not policy2_id:
             error = "Please select both policies to compare."
+            print(f"[DEBUG] Error: {error}", file=sys.stderr)
         else:
             # Validate that selected policies belong to selected insurers
             valid1 = conn.execute("SELECT 1 FROM policy WHERE id=? AND insurer_id=?", (policy1_id, insurer1_id)).fetchone()
             valid2 = conn.execute("SELECT 1 FROM policy WHERE id=? AND insurer_id=?", (policy2_id, insurer2_id)).fetchone()
+            print(f"[DEBUG] valid1={valid1}, valid2={valid2}", file=sys.stderr)
             if not valid1 or not valid2:
                 error = "Selected policy does not belong to the selected insurer."
+                print(f"[DEBUG] Error: {error}", file=sys.stderr)
             else:
                 policy1 = conn.execute("SELECT p.*, i.name as insurer FROM policy p JOIN insurer i ON p.insurer_id = i.id WHERE p.id=?", (policy1_id,)).fetchone()
                 policy2 = conn.execute("SELECT p.*, i.name as insurer FROM policy p JOIN insurer i ON p.insurer_id = i.id WHERE p.id=?", (policy2_id,)).fetchone()
+                print(f"[DEBUG] policy1={dict(policy1) if policy1 else None}", file=sys.stderr)
+                print(f"[DEBUG] policy2={dict(policy2) if policy2 else None}", file=sys.stderr)
                 f1 = conn.execute("SELECT * FROM feature WHERE policy_id=?", (policy1_id,)).fetchall()
                 f2 = conn.execute("SELECT * FROM feature WHERE policy_id=?", (policy2_id,)).fetchall()
                 features1 = {f["name"]: f["offered"] for f in f1}
                 features2 = {f["name"]: f["offered"] for f in f2}
                 all_features = sorted(set(features1) | set(features2))
+                print(f"[DEBUG] features1 keys: {list(features1.keys())}", file=sys.stderr)
+                print(f"[DEBUG] features2 keys: {list(features2.keys())}", file=sys.stderr)
     conn.close()
     popular_comparisons = get_popular_comparisons()
+    print(f"[DEBUG] Rendering compare.html with error={error}", file=sys.stderr)
     return render_template(
         "compare.html",
         insurers=insurers,

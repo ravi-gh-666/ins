@@ -102,18 +102,21 @@
             <td style="text-align:center;">{{ score_ring(policy2['affordability_rating']) }}</td>
           </tr>
           {% for feature in all_features %}
+          {% set v1 = features1[feature] if features1 and feature in features1 else None %}
+          {% set v2 = features2[feature] if features2 and feature in features2 else None %}
+          {% set highlight = (v1 != v2 and (v1 in ['Yes','No','yes','no'] or v2 in ['Yes','No','yes','no'])) %}
           <tr style="background:{{ loop.index0 % 2 == 0 and '#fafafa' or '#fff' }};">
             <td>{{ feature }}</td>
             <td style="text-align:center;">
-              {% if features1[feature] is defined %}
-                <span class="tag {{ get_score_color(features1[feature]) }}">{{ features1[feature] }}</span>
+              {% if v1 is not none %}
+                <span class="compare-highlight" style="{% if highlight %}background:#f8bbd0; color:#b71c5c; font-weight:600; border-radius:4px; padding:3px 12px;{% endif %}">{{ v1 }}</span>
               {% else %}
                 <span style="color:#aaa;">—</span>
               {% endif %}
             </td>
             <td style="text-align:center;">
-              {% if features2[feature] is defined %}
-                <span class="tag {{ get_score_color(features2[feature]) }}">{{ features2[feature] }}</span>
+              {% if v2 is not none %}
+                <span class="compare-highlight" style="{% if highlight %}background:#f8bbd0; color:#b71c5c; font-weight:600; border-radius:4px; padding:3px 12px;{% endif %}">{{ v2 }}</span>
               {% else %}
                 <span style="color:#aaa;">—</span>
               {% endif %}
@@ -123,6 +126,10 @@
         </tbody>
       </table>
     </div>
+    <script>
+    // Scroll to compare section after compare
+    document.getElementById('compare-result').scrollIntoView({ behavior: 'smooth' });
+    </script>
     {% endif %}
 </div>
 <script>
