@@ -105,16 +105,28 @@
           {% set v1 = features1[feature] if features1 and feature in features1 else None %}
           {% set v2 = features2[feature] if features2 and feature in features2 else None %}
           {% set highlight = (v1 != v2 and (v1 in ['Yes','No','yes','no'] or v2 in ['Yes','No','yes','no'])) %}
-          <tr style="background:{{ loop.index0 % 2 == 0 and '#fafafa' or '#fff' }};">
-            <td>{{ feature }}</td>
-            <td style="text-align:center;">
+          <tr style="background:{{ loop.index0 % 2 == 0 and '#fafafa' or '#fff' }}; vertical-align:top;">
+            <td style="min-width:220px; max-width:320px; padding:12px 8px;">
+              <div style="font-weight:600; display:flex; align-items:center; gap:8px;">
+                {{ feature }}
+                {% set f1 = (features1_full[feature] if features1_full and feature in features1_full else None) %}
+                {% set f2 = (features2_full[feature] if features2_full and feature in features2_full else None) %}
+                {% set yt = f1.youtube_video if f1 and f1.youtube_video else (f2.youtube_video if f2 and f2.youtube_video else None) %}
+                {% if yt %}
+                <a href="{{ yt }}" target="_blank" title="Watch feature explanation on YouTube" style="display:inline-block; vertical-align:middle;">
+                  <img src="https://www.svgrepo.com/show/13671/youtube.svg" alt="YouTube" style="width:22px; height:22px; margin-left:2px; filter: drop-shadow(0 1px 2px #aaa);">
+                </a>
+                {% endif %}
+              </div>
+            </td>
+            <td style="text-align:center; min-width:120px; max-width:220px; padding:12px 8px;">
               {% if v1 is not none %}
                 <span class="compare-highlight" style="{% if highlight %}background:#f8bbd0; color:#b71c5c; font-weight:600; border-radius:4px; padding:3px 12px;{% endif %}">{{ v1 }}</span>
               {% else %}
                 <span style="color:#aaa;">—</span>
               {% endif %}
             </td>
-            <td style="text-align:center;">
+            <td style="text-align:center; min-width:120px; max-width:220px; padding:12px 8px;">
               {% if v2 is not none %}
                 <span class="compare-highlight" style="{% if highlight %}background:#f8bbd0; color:#b71c5c; font-weight:600; border-radius:4px; padding:3px 12px;{% endif %}">{{ v2 }}</span>
               {% else %}

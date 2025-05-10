@@ -77,6 +77,16 @@
                     <div class="details"><strong>Details:</strong> {{ feature['Details'] }}</div>
                     <div class="why-matters"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
                     <div class="caveats"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
+                    {% if feature.youtube_video %}
+                    <div style="margin:12px 0;">
+                        <iframe width="360" height="203"
+                            src="https://www.youtube.com/embed/{{ feature.youtube_video.split('youtu.be/')[-1] }}"
+                            title="YouTube video"
+                            frameborder="0"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    {% endif %}
                 </div>
             {% endfor %}
             <h3>Good To Have Features</h3>
@@ -91,6 +101,16 @@
                     <div class="details"><strong>Details:</strong> {{ feature['Details'] }}</div>
                     <div class="why-matters"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
                     <div class="caveats"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
+                    {% if feature.youtube_video %}
+                    <div style="margin:12px 0;">
+                        <iframe width="360" height="203"
+                            src="https://www.youtube.com/embed/{{ feature.youtube_video.split('youtu.be/')[-1] }}"
+                            title="YouTube video"
+                            frameborder="0"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    {% endif %}
                 </div>
             {% endfor %}
             <button class="action-btn">Get Quote</button>

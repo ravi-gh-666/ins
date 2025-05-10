@@ -113,6 +113,7 @@ def compare():
     conn = get_db_connection()
     insurers = conn.execute("SELECT * FROM insurer").fetchall()
     policy1 = policy2 = features1 = features2 = None
+    features1_full = features2_full = None
     all_features = []
     error = None
     if request.method == "POST":
@@ -143,6 +144,9 @@ def compare():
                 f2 = conn.execute("SELECT * FROM feature WHERE policy_id=?", (policy2_id,)).fetchall()
                 features1 = {f["name"]: f["offered"] for f in f1}
                 features2 = {f["name"]: f["offered"] for f in f2}
+                # For full feature objects (for YouTube video)
+                features1_full = {f["name"]: f for f in f1}
+                features2_full = {f["name"]: f for f in f2}
                 all_features = sorted(set(features1) | set(features2))
                 print(f"[DEBUG] features1 keys: {list(features1.keys())}", file=sys.stderr)
                 print(f"[DEBUG] features2 keys: {list(features2.keys())}", file=sys.stderr)
@@ -157,6 +161,8 @@ def compare():
         policy2=policy2,
         features1=features1,
         features2=features2,
+        features1_full=features1_full,
+        features2_full=features2_full,
         all_features=all_features,
         error=error,
         get_score_color=get_score_color
