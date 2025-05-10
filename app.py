@@ -31,7 +31,9 @@ def get_score_color(tag):
 
 def get_popular_comparisons():
     conn = get_db_connection()
-    policies = conn.execute("SELECT p.id, p.name, p.overall_score, i.name as insurer FROM policy p JOIN insurer i ON p.insurer_id = i.id ORDER BY RANDOM() LIMIT 8").fetchall()
+    policies = conn.execute(
+        "SELECT p.id, p.name, p.overall_score, i.name as insurer, i.id as insurer_id FROM policy p JOIN insurer i ON p.insurer_id = i.id ORDER BY RANDOM() LIMIT 8"
+    ).fetchall()
     conn.close()
     pairs = []
     for i in range(0, min(8, len(policies)), 2):

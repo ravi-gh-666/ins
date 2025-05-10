@@ -40,7 +40,12 @@
         <h2 style="font-size:1.2rem; font-weight:600; margin-bottom:16px;">Popular Policy Comparisons</h2>
         <div style="display:flex; flex-wrap:wrap; gap:24px;">
             {% for left, right in popular_comparisons %}
-            <div class="card" style="flex:1 1 320px; min-width:300px; max-width:400px; display:flex; flex-direction:column; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+            <form method="POST" action="/compare" class="popular-compare-form" style="flex:1 1 320px; min-width:300px; max-width:400px; display:flex; flex-direction:column; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.07); background:#fff; border-radius:10px; margin-bottom:12px; padding:18px 8px 12px 8px; cursor:pointer; transition:box-shadow 0.2s, border 0.2s; border:2px solid transparent;" tabindex="0">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="insurer1" value="{{ left['insurer_id'] if left['insurer_id'] is defined else '' }}">
+                <input type="hidden" name="policy1" value="{{ left['id'] }}">
+                <input type="hidden" name="insurer2" value="{{ right['insurer_id'] if right['insurer_id'] is defined else '' }}">
+                <input type="hidden" name="policy2" value="{{ right['id'] }}">
                 <div style="display:flex; align-items:center; justify-content:center; width:100%; gap:18px; margin-bottom:8px;">
                     <div style="text-align:center;">
                         <div style="margin-bottom:4px;">
@@ -56,10 +61,10 @@
                         <div style="font-weight:600;">{{ right['insurer'] }}<br>{{ right['name'] }}</div>
                     </div>
                 </div>
-                <div style="width:100%; text-align:center; font-size:1em; color:#555; border-top:1px solid #eee; padding-top:8px;">
+                <div style="width:100%; text-align:center; font-size:1em; color:#555; border-top:1px solid #eee; padding-top:8px; margin-bottom:10px;">
                     {{ left['insurer'] }} {{ left['name'] }} <span style="background:#eee; color:#888; border-radius:12px; padding:2px 10px; font-size:0.95em; margin:0 6px;">vs</span> {{ right['insurer'] }} {{ right['name'] }}
                 </div>
-            </div>
+            </form>
             {% endfor %}
         </div>
     </div>
@@ -191,6 +196,25 @@ window.addEventListener("DOMContentLoaded", function() {
     document.getElementById("policy1").addEventListener("change", checkCompareBtn);
     document.getElementById("policy2").addEventListener("change", checkCompareBtn);
     setTimeout(checkCompareBtn, 200);
+    // Make the entire popular comparison box clickable and submit the form
+    document.querySelectorAll('.popular-compare-form').forEach(function(form) {
+        form.addEventListener('click', function() {
+            form.submit();
+        });
+        form.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                form.submit();
+            }
+        });
+        form.addEventListener('mouseover', function() {
+            form.style.boxShadow = '0 4px 16px rgba(213,0,96,0.13)';
+            form.style.border = '2px solid #d50060';
+        });
+        form.addEventListener('mouseout', function() {
+            form.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)';
+            form.style.border = '2px solid transparent';
+        });
+    });
 });
 </script>
 {% endblock %}
