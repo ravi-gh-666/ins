@@ -27,25 +27,16 @@ def generate_formatted_text():
     return text
 
 def main():
-    # Connect to your insurance.db
     conn = sqlite3.connect('insurance.db')
     cur = conn.cursor()
 
-    # Adjust table/column names as per your schema
-    # Example assumes a table named 'policies' with columns: id, name, vendor
-    cur.execute("SELECT id, name, vendor FROM policies")
-    policies = cur.fetchall()
-
-    # Create the policy_comparisons table if it doesn't exist
+    # Get policy id, policy name, and insurer name
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS policy_comparisons (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            policy1_id INTEGER NOT NULL,
-            policy2_id INTEGER NOT NULL,
-            compare_text TEXT,
-            UNIQUE(policy1_id, policy2_id)
-        )
+        SELECT policy.id, policy.name, insurer.name
+        FROM policy
+        JOIN insurer ON policy.insurer_id = insurer.id
     """)
+    policies = cur.fetchall()
 
     # Insert comparison text for a few policy pairs (first 3 unique pairs)
     for i in range(min(3, len(policies))):
@@ -55,14 +46,14 @@ def main():
             compare_text = generate_formatted_text()
             try:
                 cur.execute(
-                    "INSERT OR IGNORE INTO policy_comparisons (policy1_id, policy2_id, compare_text) VALUES (?, ?, ?)",
+                    "INSERT OR IGNORE INTO compare_reports (policy1_id, policy2_id, report) VALUES (?, ?, ?)",
                     (policy1_id, policy2_id, compare_text)
                 )
             except Exception as e:
                 print(f"Error inserting comparison for {policy1_name} vs {policy2_name}: {e}")
 
     conn.commit()
-    print("Sample comparisons with formatted text inserted into insurance.db.")
+    print("Sample comparisons with formatted text inserted into compare_reports in insurance.db.")
     conn.close()
 
 if __name__ == "__main__":

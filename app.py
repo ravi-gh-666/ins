@@ -152,7 +152,6 @@ def compare():
                 all_features = sorted(set(features1) | set(features2))
                 print(f"[DEBUG] features1 keys: {list(features1.keys())}", file=sys.stderr)
                 print(f"[DEBUG] features2 keys: {list(features2.keys())}", file=sys.stderr)
-    conn.close()
     popular_comparisons = get_popular_comparisons()
     print(f"[DEBUG] Rendering compare.html with error={error}", file=sys.stderr)
     return render_template(
@@ -167,7 +166,8 @@ def compare():
         features2_full=features2_full,
         all_features=all_features,
         error=error,
-        get_score_color=get_score_color
+        get_score_color=get_score_color,
+        db=conn  # Pass the db connection to the template for compare summary
     )
 
 @app.route("/api/policies/<int:insurer_id>")
