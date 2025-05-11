@@ -65,21 +65,6 @@
         </div>
     </div>
     {% if policy1 and policy2 %}
-    {% set summary = None %}
-    {% for row in db.execute('SELECT report FROM compare_reports WHERE policy1_id=? AND policy2_id=?', (policy1['id'], policy2['id'])) %}
-        {% set summary = row[0] %}
-    {% endfor %}
-    {% if not summary %}
-        {% for row in db.execute('SELECT report FROM compare_reports WHERE policy1_id=? AND policy2_id=?', (policy2['id'], policy1['id'])) %}
-            {% set summary = row[0] %}
-        {% endfor %}
-    {% endif %}
-    {% if summary %}
-    <div class="prose max-w-none my-8 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-        <h2 class="text-2xl font-bold mb-4 text-yellow-800">Comparison Summary</h2>
-        {{ summary|safe }}
-    </div>
-    {% endif %}
     {% if compare_summary %}
     <div class="prose max-w-none my-8 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded">
         <h2 class="text-2xl font-bold mb-4 text-yellow-800">Comparison Summary</h2>
