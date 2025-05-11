@@ -329,6 +329,62 @@
                 gap: 8px;
             }
         }
+        .google-select {
+            width: 100%;
+            background: #fff;
+            border: 1.5px solid #dadce0;
+            border-radius: 8px;
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 1rem;
+            color: #444;
+            padding: 16px 40px 16px 16px;
+            appearance: none;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .google-select:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26,115,232,0.15);
+        }
+        .google-select.error {
+            border-color: #d93025;
+        }
+        .google-select-wrapper {
+            position: relative;
+        }
+        .google-select-arrow {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #5f6368;
+            font-size: 1.3em;
+        }
+        .google-label {
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 1rem;
+            color: #444;
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .google-label .required {
+            color: #d93025;
+            margin-left: 2px;
+        }
+        /* Remove default arrow for select */
+        select.google-select::-ms-expand { display: none; }
+        select.google-select {
+            background-image: none;
+        }
+        @media (max-width: 700px) {
+            .google-select {
+                padding: 12px 36px 12px 12px;
+                font-size: 0.98rem;
+            }
+        }
     </style>
 </head>
 <body>
