@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mx-auto max-w-5xl p-6 bg-white rounded-xl shadow mt-8">
-    <div class="bg-pink-700 text-white text-center text-4xl font-bold py-8 rounded-t-xl mb-8">
+    <div class="header text-center text-4xl font-bold py-8 rounded-t-xl mb-8">
         Compare Health Insurance Policies
     </div>
     <form method="POST" action="/compare" class="mb-8 flex flex-col md:flex-row gap-6 items-end" autocomplete="off">
@@ -9,26 +9,26 @@
         <div class="flex-1">
             <h2 class="text-xl font-semibold mb-2">Policy 1</h2>
             {{ form.insurer1.label(class="block text-base font-medium mb-1") }}
-            {{ form.insurer1(id="insurer1", class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
+            {{ form.insurer1(id="insurer1", class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2") }}
             {{ form.policy1.label(class="block text-base font-medium mb-1") }}
-            <select id="policy1" name="policy1" class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600" data-selected="{{ selected_policy1|default('') }}"></select>
+            <select id="policy1" name="policy1" class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2" data-selected="{{ selected_policy1|default('') }}"></select>
         </div>
         <div class="flex-1">
             <h2 class="text-xl font-semibold mb-2">Policy 2</h2>
             {{ form.insurer2.label(class="block text-base font-medium mb-1") }}
-            {{ form.insurer2(id="insurer2", class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
+            {{ form.insurer2(id="insurer2", class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2") }}
             {{ form.policy2.label(class="block text-base font-medium mb-1") }}
-            <select id="policy2" name="policy2" class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600" data-selected="{{ selected_policy2|default('') }}"></select>
+            <select id="policy2" name="policy2" class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2" data-selected="{{ selected_policy2|default('') }}"></select>
         </div>
         <div class="flex-basis-full text-center mt-6">
-            <button type="submit" class="bg-pink-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-pink-800 transition">Compare</button>
+            <button type="submit" class="action-btn">Compare</button>
         </div>
     </form>
     <div class="mt-8">
         <h2 class="text-lg font-semibold mb-4">Popular Policy Comparisons</h2>
         <div class="flex flex-wrap gap-6">
             {% for left, right in popular_comparisons %}
-            <form method="POST" action="/compare" class="popular-compare-form flex-1 min-w-[300px] max-w-[400px] flex flex-col items-center bg-white rounded-xl shadow p-6 mb-4 cursor-pointer border-2 border-transparent transition hover:shadow-lg hover:border-pink-700" tabindex="0">
+            <form method="POST" action="/compare" class="popular-compare-form flex-1 min-w-[300px] max-w-[400px] flex flex-col items-center bg-white rounded-xl shadow p-6 mb-4 cursor-pointer border-2 border-transparent transition hover:shadow-lg" tabindex="0">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="insurer1" value="{{ left['insurer_id'] if left['insurer_id'] is defined else '' }}">
                 <input type="hidden" name="policy1" value="{{ left['id'] }}">
