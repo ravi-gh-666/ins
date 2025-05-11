@@ -9,16 +9,16 @@
         <div class="flex-1">
             <h2 class="text-xl font-semibold mb-2">Policy 1</h2>
             {{ form.insurer1.label(class="block text-base font-medium mb-1") }}
-            {{ form.insurer1(class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
+            {{ form.insurer1(id="insurer1", class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
             {{ form.policy1.label(class="block text-base font-medium mb-1") }}
-            {{ form.policy1(class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
+            <select id="policy1" name="policy1" class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600" data-selected="{{ selected_policy1|default('') }}"></select>
         </div>
         <div class="flex-1">
             <h2 class="text-xl font-semibold mb-2">Policy 2</h2>
             {{ form.insurer2.label(class="block text-base font-medium mb-1") }}
-            {{ form.insurer2(class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
+            {{ form.insurer2(id="insurer2", class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
             {{ form.policy2.label(class="block text-base font-medium mb-1") }}
-            {{ form.policy2(class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
+            <select id="policy2" name="policy2" class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600" data-selected="{{ selected_policy2|default('') }}"></select>
         </div>
         <div class="flex-basis-full text-center mt-6">
             <button type="submit" class="bg-pink-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-pink-800 transition">Compare</button>
@@ -53,13 +53,14 @@
         </div>
     </div>
     {% if policy1 and policy2 %}
+    <div id="compare-anchor"></div>
     {% if compare_summary %}
-    <div class="prose max-w-none my-8 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+    <div id="compare-summary" tabindex="-1" class="prose max-w-none my-8 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded">
         <h2 class="text-2xl font-bold mb-4 text-yellow-800">Comparison Summary</h2>
         {{ compare_summary|safe }}
     </div>
     {% endif %}
-    <div id="compare-result" class="mt-12">
+    <div id="compare-result" tabindex="-1" class="mt-12">
       <h2 class="text-2xl font-bold text-center mb-6">Policy Comparison</h2>
       <table class="min-w-full border border-gray-200 rounded-lg shadow text-base">
         <thead>
@@ -133,65 +134,7 @@
         </tbody>
       </table>
     </div>
-    <script>
-    document.getElementById('compare-result').scrollIntoView({ behavior: 'smooth' });
-    </script>
     {% endif %}
 </div>
-<script>
-function loadPolicies(insurerSelectId, policySelectId, selectedPolicyId) {
-    const insurerId = document.getElementById(insurerSelectId).value;
-    fetch(`/api/policies/${insurerId}`)
-        .then(response => response.json())
-        .then(policies => {
-            const policySelect = document.getElementById(policySelectId);
-            policySelect.innerHTML = "";
-            policies.forEach(p => {
-                const opt = document.createElement("option");
-                opt.value = p.id;
-                opt.textContent = p.name;
-                if (selectedPolicyId && selectedPolicyId == p.id) {
-                    opt.selected = true;
-                }
-                policySelect.appendChild(opt);
-            });
-        });
-}
-function checkCompareBtn() {
-    const p1 = document.getElementById('policy1').value;
-    const p2 = document.getElementById('policy2').value;
-    document.querySelector('button[type="submit"]').disabled = !(p1 && p2);
-}
-window.addEventListener("DOMContentLoaded", function() {
-    const selectedInsurer1 = "{{ request.form.insurer1|default('') }}";
-    const selectedPolicy1 = "{{ request.form.policy1|default('') }}";
-    const selectedInsurer2 = "{{ request.form.insurer2|default('') }}";
-    const selectedPolicy2 = "{{ request.form.policy2|default('') }}";
-    if (selectedInsurer1) document.getElementById('insurer1').value = selectedInsurer1;
-    if (selectedInsurer2) document.getElementById('insurer2').value = selectedInsurer2;
-    loadPolicies("insurer1", "policy1", selectedPolicy1);
-    loadPolicies("insurer2", "policy2", selectedPolicy2);
-    document.getElementById("insurer1").addEventListener("change", function() {
-        loadPolicies("insurer1", "policy1");
-        setTimeout(checkCompareBtn, 100);
-    });
-    document.getElementById("insurer2").addEventListener("change", function() {
-        loadPolicies("insurer2", "policy2");
-        setTimeout(checkCompareBtn, 100);
-    });
-    document.getElementById("policy1").addEventListener("change", checkCompareBtn);
-    document.getElementById("policy2").addEventListener("change", checkCompareBtn);
-    setTimeout(checkCompareBtn, 200);
-    document.querySelectorAll('.popular-compare-form').forEach(function(form) {
-        form.addEventListener('click', function() {
-            form.submit();
-        });
-        form.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                form.submit();
-            }
-        });
-    });
-});
-</script>
+<script src="{{ url_for('static', filename='compare.js') }}"></script>
 {% endblock %}

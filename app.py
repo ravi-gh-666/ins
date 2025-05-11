@@ -1,13 +1,16 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_from_directory
 import sqlite3
 import json
 from flask_wtf import FlaskForm, CSRFProtect
-from wtforms import SelectField
+from wtforms import SelectField, StringField, TextAreaField, FileField
+from wtforms.validators import DataRequired, Length
+from flask_wtf.file import FileAllowed
 import os
 import logging
 import bleach
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev')
@@ -31,6 +34,16 @@ class CompareForm(FlaskForm):
     policy1 = SelectField('Policy 1', coerce=int)
     insurer2 = SelectField('Insurer 2', coerce=int)
     policy2 = SelectField('Policy 2', coerce=int)
+
+class BlogForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(max=200)])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    author = StringField('Author', validators=[Length(max=100)])
+    image = FileField('Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')])
+
+BLOG_UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'blog_images')
+os.makedirs(BLOG_UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = BLOG_UPLOAD_FOLDER
 
 def get_db_connection():
     conn = sqlite3.connect("insurance.db")
@@ -138,8 +151,13 @@ def compare():
         policies2 = conn.execute("SELECT id, name FROM policy WHERE insurer_id=?", (selected_insurer2,)).fetchall() if selected_insurer2 else []
         form.policy1.choices = [(p['id'], p['name']) for p in policies1]
         form.policy2.choices = [(p['id'], p['name']) for p in policies2]
-        selected_policy1 = form.policy1.data or request.form.get('policy1') or (policies1[0]['id'] if policies1 else None)
-        selected_policy2 = form.policy2.data or request.form.get('policy2') or (policies2[0]['id'] if policies2 else None)
+        # Robustly determine selected policy for each dropdown
+        selected_policy1 = (form.policy1.data or request.form.get('policy1'))
+        if not selected_policy1 and policies1:
+            selected_policy1 = str(policies1[0]['id'])
+        selected_policy2 = (form.policy2.data or request.form.get('policy2'))
+        if not selected_policy2 and policies2:
+            selected_policy2 = str(policies2[0]['id'])
         policy1 = policy2 = features1 = features2 = None
         features1_full = features2_full = None
         all_features = []
@@ -194,7 +212,9 @@ def compare():
             error=error,
             get_score_color=get_score_color,
             compare_summary=compare_summary,
-            form=form
+            form=form,
+            selected_policy1=selected_policy1,
+            selected_policy2=selected_policy2
         )
 
 @app.route("/api/policies/<int:insurer_id>")
@@ -215,6 +235,73 @@ def api_policy(policy_id):
             "PolicyFeatures": [dict(f) for f in features]
         }
         return jsonify(policy_data)
+
+@app.route('/blog')
+def blog_list():
+    conn = get_db_connection()
+    blogs = conn.execute('SELECT * FROM blog ORDER BY created_at DESC').fetchall()
+    conn.close()
+    return render_template('blog_list.html', blogs=blogs)
+
+@app.route('/blog/<int:blog_id>')
+def blog_detail(blog_id):
+    conn = get_db_connection()
+    blog = conn.execute('SELECT * FROM blog WHERE id=?', (blog_id,)).fetchone()
+    conn.close()
+    if not blog:
+        return "Blog not found", 404
+    return render_template('blog_detail.html', blog=blog)
+
+@app.route('/blog/new', methods=['GET', 'POST'])
+def blog_new():
+    form = BlogForm()
+    if form.validate_on_submit():
+        image_filename = None
+        if form.image.data:
+            image_file = form.image.data
+            image_filename = secure_filename(image_file.filename)
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
+            image_file.save(image_path)
+        conn = get_db_connection()
+        conn.execute(
+            'INSERT INTO blog (title, content, author, image) VALUES (?, ?, ?, ?)',
+            (form.title.data, form.content.data, form.author.data, image_filename)
+        )
+        conn.commit()
+        conn.close()
+        flash('Blog post created!', 'success')
+        return redirect(url_for('blog_list'))
+    return render_template('blog_form.html', form=form, action='New')
+
+@app.route('/blog/<int:blog_id>/edit', methods=['GET', 'POST'])
+def blog_edit(blog_id):
+    conn = get_db_connection()
+    blog = conn.execute('SELECT * FROM blog WHERE id=?', (blog_id,)).fetchone()
+    if not blog:
+        conn.close()
+        return "Blog not found", 404
+    form = BlogForm(data=blog)
+    if form.validate_on_submit():
+        image_filename = blog['image']
+        if form.image.data:
+            image_file = form.image.data
+            image_filename = secure_filename(image_file.filename)
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
+            image_file.save(image_path)
+        conn.execute(
+            'UPDATE blog SET title=?, content=?, author=?, image=?, updated_at=CURRENT_TIMESTAMP WHERE id=?',
+            (form.title.data, form.content.data, form.author.data, image_filename, blog_id)
+        )
+        conn.commit()
+        conn.close()
+        flash('Blog post updated!', 'success')
+        return redirect(url_for('blog_detail', blog_id=blog_id))
+    conn.close()
+    return render_template('blog_form.html', form=form, action='Edit', blog=blog)
+
+@app.route('/static/blog_images/<filename>')
+def blog_image(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
