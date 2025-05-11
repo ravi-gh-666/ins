@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mx-auto max-w-4xl p-6 bg-white rounded-xl shadow mt-8">
-    <div class="header bg-pink-700 text-white text-center text-4xl font-bold py-8 rounded-t-xl mb-8">
+    <div class="header bg-blue-700 text-white text-center text-4xl font-bold py-8 rounded-t-xl mb-8">
         Blog
     </div>
-    <a href="{{ url_for('blog_new') }}" class="action-btn bg-pink-700 hover:bg-pink-800 text-white font-semibold py-3 px-8 rounded-lg mb-8">New Blog Post</a>
+    <a href="{{ url_for('blog_new') }}" class="action-btn bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 px-8 rounded-lg mb-8">New Blog Post</a>
     {% for blog in blogs %}
         <div class="card bg-white rounded-lg shadow p-6 mb-6">
             <h2 class="text-2xl font-bold mb-2"><a href="{{ url_for('blog_detail', blog_id=blog['id']) }}">{{ blog['title'] }}</a></h2>
@@ -13,7 +13,7 @@
                 <img src="{{ url_for('blog_image', filename=blog['image']) }}" alt="Blog Image" class="mb-2 rounded-lg shadow" style="max-width:300px;">
             {% endif %}
             <p class="mb-2">{{ blog['content'][:200] }}{% if blog['content']|length > 200 %}...{% endif %}</p>
-            <a href="{{ url_for('blog_detail', blog_id=blog['id']) }}" class="text-pink-700 font-semibold">Read more</a>
+            <a href="{{ url_for('blog_detail', blog_id=blog['id']) }}" class="text-blue-700 font-semibold">Read more</a>
         </div>
     {% else %}
         <p>No blog posts yet.</p>
