@@ -22,8 +22,8 @@
             {% endif %}
             <div class="prose mb-4">{{ blog['content']|safe }}</div>
             <div class="flex gap-4 mt-6">
-                <a href="{{ url_for('blog_edit', blog_id=blog['id']) }}" class="action-btn bg-pink-700 hover:bg-pink-800 text-white font-semibold py-3 px-8 rounded-lg">Edit</a>
-                <a href="{{ url_for('blog_list') }}" class="action-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-8 rounded-lg">Back to Blog</a>
+                <a href="{{ url_for('blog_edit', blog_id=blog['id']) }}" class="action-btn">Edit</a>
+                <a href="{{ url_for('blog_list') }}" class="action-btn outline">Back to Blog</a>
             </div>
         </div>
     </div>

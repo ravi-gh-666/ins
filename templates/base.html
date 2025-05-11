@@ -385,6 +385,43 @@
                 font-size: 0.98rem;
             }
         }
+        .action-btn, button[type="submit"], input[type="submit"] {
+            background: #1a73e8;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 18px 44px;
+            font-size: 1.18rem;
+            font-weight: 500;
+            font-family: 'Roboto', Arial, sans-serif;
+            box-shadow: 0 1px 4px rgba(60,64,67,.08);
+            line-height: 1.1;
+            letter-spacing: .01em;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: inline-block;
+            text-align: center;
+        }
+        .action-btn.outline, .btn-outline {
+            background: #fff;
+            color: #1a73e8;
+            border: 2px solid #1a73e8;
+        }
+        .action-btn:hover, button[type="submit"]:hover, input[type="submit"]:hover {
+            background: #1765c1;
+            color: #fff;
+        }
+        .action-btn.outline:hover, .btn-outline:hover {
+            background: #e8f0fe;
+            color: #1765c1;
+            border-color: #1765c1;
+        }
+        @media (max-width: 700px) {
+            .action-btn, button[type="submit"], input[type="submit"] {
+                padding: 14px 0;
+                font-size: 1.05rem;
+            }
+        }
     </style>
 </head>
 <body>

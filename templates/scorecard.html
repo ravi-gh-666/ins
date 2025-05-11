@@ -10,21 +10,27 @@
             Instantly view insurer details, policy features, and scores for health insurance plans in India.
         </div>
     </div>
-    <form method="post" class="mb-8 flex flex-col md:flex-row gap-6 items-end">
+    <form method="post" class="mb-8">
         {{ form.hidden_tag() }}
-        <div class="flex-1">
-            <label class="google-label" for="insurer">Insurer <span class="required">*</span></label>
-            <div class="google-select-wrapper">
-                {{ form.insurer(class="google-select", id="insurer") }}
-                <span class="material-icons google-select-arrow">arrow_drop_down</span>
+        <div class="flex flex-col md:flex-row gap-6 items-start w-full">
+            <div class="flex-1 min-w-0">
+                <label class="google-label" for="insurer">Insurer <span class="required">*</span></label>
+                <div class="google-select-wrapper">
+                    {{ form.insurer(class="google-select", id="insurer") }}
+                    <span class="material-icons google-select-arrow">arrow_drop_down</span>
+                </div>
             </div>
-            <label class="google-label mt-4" for="policy">Policy <span class="required">*</span></label>
-            <div class="google-select-wrapper">
-                {{ form.policy(class="google-select", id="policy") }}
-                <span class="material-icons google-select-arrow">arrow_drop_down</span>
+            <div class="flex-1 min-w-0">
+                <label class="google-label" for="policy">Policy <span class="required">*</span></label>
+                <div class="google-select-wrapper">
+                    {{ form.policy(class="google-select", id="policy") }}
+                    <span class="material-icons google-select-arrow">arrow_drop_down</span>
+                </div>
             </div>
         </div>
-        <button type="submit" class="action-btn" style="background:#1a73e8; color:#fff; border-radius:999px; padding:18px 44px; font-size:1.18rem; font-weight:500; box-shadow:0 1px 4px rgba(60,64,67,.08); line-height:1.1; letter-spacing:.01em;">View Scorecard</button>
+        <div class="w-full flex justify-center mt-6">
+            <button type="submit" class="action-btn">View Scorecard</button>
+        </div>
     </form>
     {% if policy_data['InsurerDetails'] %}
     <div style="margin-bottom: 2.5rem;">
@@ -120,7 +126,7 @@
                 {% endif %}
             </div>
         {% endfor %}
-        <button class="action-btn" style="background:#1a73e8; color:#fff;">Get Quote</button>
+        <button class="action-btn">Get Quote</button>
     </div>
     {% else %}
     <div class="card bg-red-50 text-center text-red-700 font-semibold py-8">
