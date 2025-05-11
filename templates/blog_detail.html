@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <h1 class="text-3xl font-bold mb-2">{{ blog['title'] }}</h1>
-    <p class="text-gray-600 mb-4">By {{ blog['author'] or 'Anonymous' }} on {{ blog['created_at'][:10] }}</p>
-    {% if blog['image'] %}
-        <img src="{{ url_for('blog_image', filename=blog['image']) }}" alt="Blog Image" class="mb-4" style="max-width:400px;">
-    {% endif %}
-    <div class="prose mb-4">{{ blog['content']|safe }}</div>
-    <a href="{{ url_for('blog_edit', blog_id=blog['id']) }}" class="action-btn">Edit</a>
-    <a href="{{ url_for('blog_list') }}" class="action-btn">Back to Blog</a>
+<div class="container mx-auto max-w-4xl p-6 bg-white rounded-xl shadow mt-8">
+    <div class="header bg-pink-700 text-white text-center text-4xl font-bold py-8 rounded-t-xl mb-8">
+        {{ blog['title'] }}
+    </div>
+    <div class="card bg-white rounded-lg shadow p-6 mb-8">
+        <p class="text-gray-600 mb-4">By {{ blog['author'] or 'Anonymous' }} on {{ blog['created_at'][:10] }}</p>
+        {% if blog['image'] %}
+            <img src="{{ url_for('blog_image', filename=blog['image']) }}" alt="Blog Image" class="mb-4 rounded-lg shadow" style="max-width:400px;">
+        {% endif %}
+        <div class="prose mb-4">{{ blog['content']|safe }}</div>
+        <div class="flex gap-4 mt-6">
+            <a href="{{ url_for('blog_edit', blog_id=blog['id']) }}" class="action-btn bg-pink-700 hover:bg-pink-800 text-white font-semibold py-3 px-8 rounded-lg">Edit</a>
+            <a href="{{ url_for('blog_list') }}" class="action-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-8 rounded-lg">Back to Blog</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

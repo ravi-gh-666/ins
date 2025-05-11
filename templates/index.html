@@ -1,33 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container" style="text-align:center; margin-top:60px;">
-    <h1>Welcome to the Insurance Portal</h1>
-    <p style="font-size:1.2em; margin:24px 0;">
+<div class="container mx-auto max-w-4xl p-6 bg-white rounded-xl shadow mt-8">
+    <div class="header bg-pink-700 text-white text-center text-4xl font-bold py-8 rounded-t-xl mb-8">
+        Welcome to the Insurance Portal
+    </div>
+    <p class="text-lg mb-6 text-center">
         Compare, analyze, and choose the best health insurance policies for you and your family.
     </p>
-    <a href="/scorecard" class="action-btn" style="display:inline-block; margin:24px auto;">Go to Scorecard</a>
-    <div class="card" style="margin-top:48px;">
-        <h2 style="text-align:center; margin-bottom:24px;">Best Health Insurance Plans in India 2025</h2>
-        <table style="width:100%; border-collapse:collapse;">
+    <a href="/scorecard" class="action-btn bg-pink-700 hover:bg-pink-800 text-white font-semibold py-3 px-8 rounded-lg mb-8">Go to Scorecard</a>
+    <div class="card bg-white rounded-lg shadow p-6 mt-8">
+        <h2 class="text-2xl font-bold text-center mb-6">Best Health Insurance Plans in India 2025</h2>
+        <table class="min-w-full border border-gray-200 rounded-lg shadow text-base">
             <thead>
-                <tr style="background:#f5f5f5;">
-                    <th style="padding:12px 8px; text-align:left;">Top Health Plans</th>
-                    <th style="padding:12px 8px;">Insurer Rating</th>
-                    <th style="padding:12px 8px;">Feature Rating</th>
-                    <th style="padding:12px 8px;">Affordability</th>
-                    <th style="padding:12px 8px;">Final Rating</th>
+                <tr class="bg-gray-100">
+                    <th class="p-4 text-left">Top Health Plans</th>
+                    <th class="p-4 text-center">Insurer Rating</th>
+                    <th class="p-4 text-center">Feature Rating</th>
+                    <th class="p-4 text-center">Affordability</th>
+                    <th class="p-4 text-center">Final Rating</th>
                 </tr>
             </thead>
             <tbody>
                 {% for plan in top_plans %}
-                <tr style="border-bottom:1px solid #eee;">
-                    <td style="padding:10px 8px; text-align:left; font-weight:600;">
-                        {{ plan['name'] }}<br><span style="font-size:0.95em; color:#555;">{{ plan['insurer'] }}</span>
+                <tr class="border-b border-gray-100">
+                    <td class="p-4 text-left font-semibold">
+                        {{ plan['name'] }}<br><span class="text-base text-gray-500">{{ plan['insurer'] }}</span>
                     </td>
-                    <td style="text-align:center;">{{ score_ring(plan['insurer_rating']) }}</td>
-                    <td style="text-align:center;">{{ score_ring(plan['feature_rating']) }}</td>
-                    <td style="text-align:center;">{{ score_ring(plan['affordability_rating']) }}</td>
-                    <td style="text-align:center;">{{ score_ring(plan['overall_score']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['insurer_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['feature_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['affordability_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['overall_score']) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
