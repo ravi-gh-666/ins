@@ -6,10 +6,19 @@ from wtforms import SelectField
 import os
 import logging
 import bleach
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev')
 csrf = CSRFProtect(app)
+
+# Add rate limiting
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"]
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -115,8 +124,7 @@ def scorecard():
 
 @app.route("/compare", methods=["GET", "POST"])
 def compare():
-    import sys
-    print("[DEBUG] compare route called", file=sys.stderr)
+    logging.info("[DEBUG] compare route called")
     form = CompareForm()
     with get_db_connection() as conn:
         insurers = conn.execute("SELECT * FROM insurer").fetchall()
@@ -190,12 +198,14 @@ def compare():
         )
 
 @app.route("/api/policies/<int:insurer_id>")
+@limiter.limit("30/minute")
 def api_policies(insurer_id):
     with get_db_connection() as conn:
         policies = conn.execute("SELECT id, name FROM policy WHERE insurer_id=?", (insurer_id,)).fetchall()
         return jsonify([{"id": p["id"], "name": p["name"]} for p in policies])
 
 @app.route("/api/policy/<int:policy_id>")
+@limiter.limit("30/minute")
 def api_policy(policy_id):
     with get_db_connection() as conn:
         policy_row = conn.execute("SELECT * FROM policy WHERE id=?", (policy_id,)).fetchone()

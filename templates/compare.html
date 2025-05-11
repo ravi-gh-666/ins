@@ -5,32 +5,20 @@
         Compare Health Insurance Policies
     </div>
     <form method="POST" action="/compare" class="mb-8 flex flex-col md:flex-row gap-6 items-end" autocomplete="off">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ form.hidden_tag() }}
         <div class="flex-1">
             <h2 class="text-xl font-semibold mb-2">Policy 1</h2>
-            <label for="insurer1" class="block text-base font-medium mb-1">Select Insurer:</label>
-            <select name="insurer1" id="insurer1" required class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600">
-                {% for insurer in insurers %}
-                    <option value="{{ insurer.id }}" {% if request.form.insurer1|default('')|string == insurer.id|string %}selected{% endif %}>{{ insurer.name }}</option>
-                {% endfor %}
-            </select>
-            <label for="policy1" class="block text-base font-medium mb-1">Select Policy:</label>
-            <select name="policy1" id="policy1" required class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600">
-                <!-- Policies for insurer 1 will be loaded dynamically -->
-            </select>
+            {{ form.insurer1.label(class="block text-base font-medium mb-1") }}
+            {{ form.insurer1(class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
+            {{ form.policy1.label(class="block text-base font-medium mb-1") }}
+            {{ form.policy1(class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
         </div>
         <div class="flex-1">
             <h2 class="text-xl font-semibold mb-2">Policy 2</h2>
-            <label for="insurer2" class="block text-base font-medium mb-1">Select Insurer:</label>
-            <select name="insurer2" id="insurer2" required class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600">
-                {% for insurer in insurers %}
-                    <option value="{{ insurer.id }}" {% if request.form.insurer2|default('')|string == insurer.id|string %}selected{% endif %}>{{ insurer.name }}</option>
-                {% endfor %}
-            </select>
-            <label for="policy2" class="block text-base font-medium mb-1">Select Policy:</label>
-            <select name="policy2" id="policy2" required class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600">
-                <!-- Policies for insurer 2 will be loaded dynamically -->
-            </select>
+            {{ form.insurer2.label(class="block text-base font-medium mb-1") }}
+            {{ form.insurer2(class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
+            {{ form.policy2.label(class="block text-base font-medium mb-1") }}
+            {{ form.policy2(class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-600") }}
         </div>
         <div class="flex-basis-full text-center mt-6">
             <button type="submit" class="bg-pink-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-pink-800 transition">Compare</button>
