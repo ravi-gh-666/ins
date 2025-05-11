@@ -4,33 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Insurance Policy Scorecard{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <meta name="description" content="Compare, analyze, and choose the best health insurance policies in India. View scorecards, compare features, and read expert blogs.">
+    <meta name="keywords" content="insurance, health insurance, policy, compare, scorecard, India, best plans, insurer, features, affordability, blog">
+    <meta property="og:title" content="Insurance Policy Scorecard">
+    <meta property="og:description" content="Compare, analyze, and choose the best health insurance policies in India. View scorecards, compare features, and read expert blogs.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:image" content="https://yourdomain.com/static/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Insurance Policy Scorecard">
+    <meta name="twitter:description" content="Compare, analyze, and choose the best health insurance policies in India. View scorecards, compare features, and read expert blogs.">
+    <meta name="twitter:image" content="https://yourdomain.com/static/og-image.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Tailwind-like font integration -->
     <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cdn.tailwindcss.com; img-src 'self' data: https://www.svgrepo.com; connect-src 'self'; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com;">
     <style>
-        /* ...existing CSS from index.html... */
         body {
-            font-family: "Inter", sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             font-size: 1rem; /* 16px, Tailwind text-base */
             font-weight: 400;
-            color: #22223b;
+            color: #222;
             padding-top: 60px;
         }
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 24px;
+            background: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .main-hero {
+            margin-top: 96px;
+            margin-bottom: 64px;
+            text-align: center;
+        }
         h1, .header h1 {
-            font-size: 2.25rem; /* 36px, Tailwind text-4xl */
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 3.5rem;
             font-weight: 700;
-            letter-spacing: 0.01em;
+            color: #4285f4;
+            margin-bottom: 0.5em;
+            letter-spacing: 0;
+        }
+        .subheadline {
+            font-size: 1.5rem;
+            color: #444;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
         }
         h2 {
-            font-size: 1.5rem; /* 24px, Tailwind text-2xl */
-            font-weight: 600;
+            font-size: 2rem;
+            font-weight: 500;
+            color: #222;
+            margin-bottom: 0.4em;
         }
         h3 {
-            font-size: 1.25rem; /* 20px, Tailwind text-xl */
-            font-weight: 600;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #222;
         }
         code, pre {
             font-family: "IBM Plex Mono", monospace;
@@ -53,14 +88,6 @@
         }
         button, select, input {
             font-size: 1rem;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 30px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
         }
         .header {
             background: #d50060;
@@ -211,60 +238,102 @@
         }
         .topbar {
             width: 100%;
-            background: #22223b;
-            color: #fff;
+            background: #fff;
+            color: #222;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 32px;
-            height: 60px;
+            padding: 0 24px;
+            height: 56px;
             position: fixed;
             top: 0;
             left: 0;
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            box-shadow: 0 1px 0 #e0e0e0;
         }
         .topbar .logo {
-            font-size: 1.4em;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #fff;
+            display: flex;
+            align-items: center;
+            font-size: 1.25em;
+            font-weight: 500;
+            color: #222;
             text-decoration: none;
+            letter-spacing: 0.5px;
+            margin-right: 32px;
+        }
+        .topbar .logo span {
+            font-weight: 700;
+            color: #4285f4;
+            margin-right: 2px;
         }
         .topbar-nav {
             display: flex;
-            gap: 32px;
+            gap: 20px;
         }
         .topbar-nav a {
-            color: #fff;
+            color: #222;
             text-decoration: none;
-            font-size: 1.08em;
+            font-size: 1em;
             font-weight: 500;
-            padding: 8px 0;
+            padding: 0 8px;
             border-bottom: 2px solid transparent;
             transition: color 0.2s, border-bottom 0.2s;
         }
         .topbar-nav a.active,
         .topbar-nav a:hover {
-            color: #d50060;
-            border-bottom: 2px solid #d50060;
+            color: #4285f4;
+            border-bottom: 2px solid #4285f4;
         }
-        @media (max-width: 700px) {
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .topbar-actions .btn-primary {
+            background: #1a73e8;
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            padding: 6px 18px;
+            font-weight: 500;
+            font-size: 0.98em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .topbar-actions .btn-primary:hover {
+            background: #1765c1;
+        }
+        .topbar-actions a {
+            color: #1a73e8;
+            font-weight: 500;
+            text-decoration: none;
+            margin-left: 8px;
+        }
+        .topbar-actions .icon {
+            font-size: 1.3em;
+            color: #757575;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        @media (max-width: 900px) {
             .topbar {
                 flex-direction: column;
                 height: auto;
-                padding: 0 10px;
+                padding: 0 6px;
             }
             .topbar-nav {
-                gap: 18px;
+                gap: 10px;
                 margin-top: 6px;
+            }
+            .topbar-actions {
+                gap: 8px;
             }
         }
     </style>
 </head>
 <body>
     <div class="topbar">
-        <a href="/" class="logo">Insurance Portal</a>
+        <a href="/" class="logo"><span>G</span>Insurance Portal</a>
         <nav class="topbar-nav">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
             <a href="/scorecard" class="{% if request.path.startswith('/scorecard') %}active{% endif %}">Scorecard</a>
@@ -272,6 +341,13 @@
             <a href="/blog" class="{% if request.path.startswith('/blog') %}active{% endif %}">Blog</a>
             <a href="/contact" class="{% if request.path.startswith('/contact') %}active{% endif %}">Contact Us</a>
         </nav>
+        <div class="topbar-actions">
+            <span class="material-icons icon">search</span>
+            <a href="#" class="">Docs</a>
+            <a href="#" class="">Support</a>
+            <a href="#" class="">Sign in</a>
+            <button class="btn-primary">Start free</button>
+        </div>
     </div>
     {% macro score_ring(value) %}
         {% set color = '#e53935' if value <= 5 else '#ffa000' if value < 8 else '#43a047' %}

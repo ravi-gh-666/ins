@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mx-auto max-w-4xl p-6 bg-white rounded-xl shadow mt-8">
-    <div class="header bg-blue-700 text-white text-center text-4xl font-bold py-8 rounded-t-xl mb-8">
-        Insurance Policy Scorecard
+<div class="container">
+    <div class="main-hero" style="margin-top: 120px; margin-bottom: 72px;">
+        <h1 style="font-family:'Roboto','Arial',sans-serif;font-size:3.5rem;font-weight:700;line-height:1.08;letter-spacing:-.01em;margin-bottom:0.5em;">
+            <span style="color:#4285f4;display:block;">Insurance Policy</span>
+            <span style="color:#34a853;display:block;">Scorecard</span>
+        </h1>
+        <div class="subheadline" style="font-family:'Roboto','Arial',sans-serif;font-size:1.5rem;color:#444;font-weight:400;line-height:1.4;margin-bottom:2.8rem;max-width:600px;margin-left:auto;margin-right:auto;">
+            Instantly view insurer details, policy features, and scores for health insurance plans in India.
+        </div>
     </div>
     <form method="post" class="mb-8 flex flex-col md:flex-row gap-6 items-end">
         {{ form.hidden_tag() }}
@@ -12,13 +18,13 @@
             {{ form.policy.label(class="block text-lg font-semibold mb-2") }}
             {{ form.policy(class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600") }}
         </div>
-        <button type="submit" class="bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg hover:bg-blue-800 transition">View Scorecard</button>
+        <button type="submit" class="action-btn" style="background:#1a73e8; color:#fff;">View Scorecard</button>
     </form>
     {% if policy_data['InsurerDetails'] %}
-    <div class="card bg-white rounded-lg shadow p-6 mb-8">
+    <div style="margin-bottom: 2.5rem;">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div class="flex-1">
-                <h2 class="text-2xl font-bold mb-2">{{ policy_data['InsurerDetails']['InsurancePolicy'] }} by {{ policy_data['InsurerDetails']['Insurer'] }}</h2>
+                <h2>{{ policy_data['InsurerDetails']['InsurancePolicy'] }} by {{ policy_data['InsurerDetails']['Insurer'] }}</h2>
                 <p class="mb-1"><strong>3 Year Average CSR:</strong> {{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag'] }}</span>
                 </p>
@@ -58,9 +64,9 @@
             {% endif %}
         </div>
     </div>
-    <div class="card bg-white rounded-lg shadow p-6 mb-8">
-        <h2 class="text-xl font-bold mb-4">Policy Features</h2>
-        <h3 class="text-lg font-semibold mb-2">Mandatory Features</h3>
+    <div style="margin-bottom: 2.5rem;">
+        <h2>Policy Features</h2>
+        <h3>Mandatory Features</h3>
         {% for feature in mandatory_features %}
             <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4">
                 <div class="feature-title flex items-center text-base font-semibold mb-2">
@@ -84,7 +90,7 @@
                 {% endif %}
             </div>
         {% endfor %}
-        <h3 class="text-lg font-semibold mt-6 mb-2">Good To Have Features</h3>
+        <h3 class="mt-6 mb-2">Good To Have Features</h3>
         {% for feature in good_features %}
             <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4">
                 <div class="feature-title flex items-center text-base font-semibold mb-2">
@@ -108,7 +114,7 @@
                 {% endif %}
             </div>
         {% endfor %}
-        <button class="action-btn bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 px-8 rounded-lg mt-6">Get Quote</button>
+        <button class="action-btn" style="background:#1a73e8; color:#fff;">Get Quote</button>
     </div>
     {% else %}
     <div class="card bg-red-50 text-center text-red-700 font-semibold py-8">
