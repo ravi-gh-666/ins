@@ -23,10 +23,10 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cdn.tailwindcss.com; img-src 'self' data: https://www.svgrepo.com; connect-src 'self'; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com;">
     <style>
         body {
-            font-family: 'Roboto', Arial, sans-serif;
+            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
             font-size: 1rem; /* 16px, Tailwind text-base */
             font-weight: 400;
-            color: #222;
+            color: #202124;
             padding-top: 60px;
         }
         .container {
@@ -52,7 +52,7 @@
         }
         .subheadline {
             font-size: 1.5rem;
-            color: #444;
+            color: #5f6368;
             font-weight: 400;
             margin-bottom: 2.5rem;
         }
@@ -63,7 +63,7 @@
             margin-bottom: 0.4em;
         }
         h3 {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 500;
             color: #222;
         }
@@ -421,6 +421,15 @@
                 padding: 14px 0;
                 font-size: 1.05rem;
             }
+        }
+        .card, .bg-gray-50 {
+            transition: box-shadow 0.2s cubic-bezier(.4,0,.2,1), transform 0.2s cubic-bezier(.4,0,.2,1), background 0.2s;
+        }
+        .card:hover, .bg-gray-50:hover {
+            box-shadow: 0 8px 24px rgba(60,64,67,.18), 0 1.5px 6px rgba(60,64,67,.08);
+            background: #f8fafc;
+            transform: translateY(-2px) scale(1.01);
+            cursor: pointer;
         }
     </style>
 </head>
