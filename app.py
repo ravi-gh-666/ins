@@ -141,6 +141,8 @@ def scorecard():
 def compare():
     logging.info("[DEBUG] compare route called")
     form = CompareForm()
+    policy1_details = {}
+    policy2_details = {}
     with get_db_connection() as conn:
         insurers = conn.execute("SELECT * FROM insurer").fetchall()
         insurer_choices = [(i['id'], i['name']) for i in insurers]
@@ -178,6 +180,9 @@ def compare():
             else:
                 policy1 = conn.execute("SELECT p.*, i.name as insurer FROM policy p JOIN insurer i ON p.insurer_id = i.id WHERE p.id=?", (policy1_id,)).fetchone()
                 policy2 = conn.execute("SELECT p.*, i.name as insurer FROM policy p JOIN insurer i ON p.insurer_id = i.id WHERE p.id=?", (policy2_id,)).fetchone()
+                # Parse details JSON for each policy
+                policy1_details = json.loads(policy1['details']) if policy1 and policy1['details'] else {}
+                policy2_details = json.loads(policy2['details']) if policy2 and policy2['details'] else {}
                 f1 = conn.execute("SELECT * FROM feature WHERE policy_id=?", (policy1_id,)).fetchall()
                 f2 = conn.execute("SELECT * FROM feature WHERE policy_id=?", (policy2_id,)).fetchall()
                 features1 = {f["name"]: f["offered"] for f in f1}
@@ -216,7 +221,9 @@ def compare():
             compare_summary=compare_summary,
             form=form,
             selected_policy1=selected_policy1,
-            selected_policy2=selected_policy2
+            selected_policy2=selected_policy2,
+            policy1_details=policy1_details,
+            policy2_details=policy2_details
         )
 
 @app.route("/api/policies/<int:insurer_id>")

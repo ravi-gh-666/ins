@@ -72,40 +72,10 @@
     </div>
     {% if policy1 and policy2 %}
     <div id="compare-anchor"></div>
-    <div class="flex flex-col md:flex-row gap-8 mb-8">
-        <div class="flex-1 bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-bold mb-2 text-blue-900">Details: {{ policy1['name'] }}</h2>
-            <div class="text-base text-gray-700" style="white-space:pre-line;">
-                {{ policy1_details.details if policy1_details and policy1_details.details else 'No details available.' }}
-            </div>
-        </div>
-        <div class="flex-1 bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-bold mb-2 text-blue-900">Details: {{ policy2['name'] }}</h2>
-            <div class="text-base text-gray-700" style="white-space:pre-line;">
-                {{ policy2_details.details if policy2_details and policy2_details.details else 'No details available.' }}
-            </div>
-        </div>
-    </div>
     {% if compare_summary %}
     <div id="compare-summary" tabindex="-1" class="prose max-w-none my-8 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded">
         <h2 class="text-2xl font-bold mb-4 text-yellow-800">Comparison Summary</h2>
         {{ compare_summary|safe }}
-    </div>
-    {% endif %}
-    {% if policy1_details or policy2_details %}
-    <div class="card bg-white rounded-lg shadow p-6 mb-8 flex flex-col md:flex-row gap-6 items-stretch">
-        {% if policy1_details and policy1_details.details %}
-        <div class="flex-1">
-            <h2 class="text-lg font-semibold mb-2">Details: {{ policy1['name'] }}</h2>
-            <div class="text-base text-gray-700">{{ policy1_details.details }}</div>
-        </div>
-        {% endif %}
-        {% if policy2_details and policy2_details.details %}
-        <div class="flex-1">
-            <h2 class="text-lg font-semibold mb-2">Details: {{ policy2['name'] }}</h2>
-            <div class="text-base text-gray-700">{{ policy2_details.details }}</div>
-        </div>
-        {% endif %}
     </div>
     {% endif %}
     <div id="compare-result" tabindex="-1" class="mt-12">
