@@ -123,8 +123,13 @@
             {% for feature in all_features %}
               {% set is_mandatory = features1_full[feature]['category'] == 'Mandatory' if features1_full and feature in features1_full and features1_full[feature]['category'] else (features2_full[feature]['category'] == 'Mandatory' if features2_full and feature in features2_full and features2_full[feature]['category'] else False) %}
               {% if is_mandatory %}
-                <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-middle">
-                  <td class="min-w-[220px] max-w-[320px] p-4 font-normal text-left align-middle" style="padding-left:2em;">{{ feature }}</td>
+                <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-middle feature-row" data-feature="{{ feature|replace(' ', '_') }}">
+                  <td class="min-w-[220px] max-w-[320px] p-4 font-normal text-left align-middle cursor-pointer flex justify-between items-center" style="padding-left:2em;">
+                    <span>{{ feature }}</span>
+                    <span class="feature-toggle inline-flex items-center ml-2">
+                      <span class="material-icons feature-arrow" style="transition: transform 0.2s;">expand_more</span>
+                    </span>
+                  </td>
                   <td class="text-center min-w-[120px] max-w-[220px] p-4 font-normal align-middle">
                     {% set offered1 = features1[feature] if features1 and feature in features1 else None %}
                     {% if offered1 is not none %}
@@ -142,6 +147,22 @@
                     {% endif %}
                   </td>
                 </tr>
+                <tr class="feature-details-row hidden" id="details-{{ feature|replace(' ', '_') }}">
+                  <td colspan="3" class="bg-gray-50 p-4 text-sm text-gray-700">
+                    {% if feature_compare_reports and feature in feature_compare_reports %}
+                      <div class="prose max-w-none">{{ feature_compare_reports[feature]|safe }}</div>
+                    {% else %}
+                    <div class="flex flex-col md:flex-row gap-8">
+                      <div class="flex-1">
+                        <b>Details 1:</b> {{ features1_full[feature]['Details'] if features1_full and feature in features1_full and features1_full[feature]['Details'] else '—' }}
+                      </div>
+                      <div class="flex-1">
+                        <b>Details 2:</b> {{ features2_full[feature]['Details'] if features2_full and feature in features2_full and features2_full[feature]['Details'] else '—' }}
+                      </div>
+                    </div>
+                    {% endif %}
+                  </td>
+                </tr>
               {% endif %}
             {% endfor %}
             <!-- Good to Have Features Heading -->
@@ -151,8 +172,13 @@
             {% for feature in all_features %}
               {% set is_good = features1_full[feature]['category'] != 'Mandatory' if features1_full and feature in features1_full and features1_full[feature]['category'] else (features2_full[feature]['category'] != 'Mandatory' if features2_full and feature in features2_full and features2_full[feature]['category'] else True) %}
               {% if is_good %}
-                <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-middle">
-                  <td class="min-w-[220px] max-w-[320px] p-4 font-normal text-left align-middle" style="padding-left:2em;">{{ feature }}</td>
+                <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-middle feature-row" data-feature="{{ feature|replace(' ', '_') }}">
+                  <td class="min-w-[220px] max-w-[320px] p-4 font-normal text-left align-middle cursor-pointer flex justify-between items-center" style="padding-left:2em;">
+                    <span>{{ feature }}</span>
+                    <span class="feature-toggle inline-flex items-center ml-2">
+                      <span class="material-icons feature-arrow" style="transition: transform 0.2s;">expand_more</span>
+                    </span>
+                  </td>
                   <td class="text-center min-w-[120px] max-w-[220px] p-4 font-normal align-middle">
                     {% set offered1 = features1[feature] if features1 and feature in features1 else None %}
                     {% if offered1 is not none %}
@@ -167,6 +193,22 @@
                       <span class="compare-highlight {% if (offered2 != (features1[feature] if features1 and feature in features1 else None)) and (offered2 in ['Yes','No','yes','no'] or (features1[feature] if features1 and feature in features1 else None) in ['Yes','No','yes','no']) %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ offered2 }}</span>
                     {% else %}
                       <span class="text-gray-400">—</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr class="feature-details-row hidden" id="details-{{ feature|replace(' ', '_') }}">
+                  <td colspan="3" class="bg-gray-50 p-4 text-sm text-gray-700">
+                    {% if feature_compare_reports and feature in feature_compare_reports %}
+                      <div class="prose max-w-none">{{ feature_compare_reports[feature]|safe }}</div>
+                    {% else %}
+                    <div class="flex flex-col md:flex-row gap-8">
+                      <div class="flex-1">
+                        <b>Details 1:</b> {{ features1_full[feature]['Details'] if features1_full and feature in features1_full and features1_full[feature]['Details'] else '—' }}
+                      </div>
+                      <div class="flex-1">
+                        <b>Details 2:</b> {{ features2_full[feature]['Details'] if features2_full and feature in features2_full and features2_full[feature]['Details'] else '—' }}
+                      </div>
+                    </div>
                     {% endif %}
                   </td>
                 </tr>

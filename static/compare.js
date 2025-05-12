@@ -73,4 +73,25 @@ window.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+    // Feature details dropdown toggle
+    document.querySelectorAll('.feature-row').forEach(function(row) {
+        row.addEventListener('click', function() {
+            var feature = row.getAttribute('data-feature');
+            var detailsRow = document.getElementById('details-' + feature);
+            var arrow = row.querySelector('.feature-arrow');
+            if (detailsRow) {
+                var isOpen = !detailsRow.classList.contains('hidden');
+                document.querySelectorAll('.feature-details-row').forEach(function(r) {
+                    r.classList.add('hidden');
+                });
+                document.querySelectorAll('.feature-arrow').forEach(function(a) {
+                    a.style.transform = '';
+                });
+                if (!isOpen) {
+                    detailsRow.classList.remove('hidden');
+                    if (arrow) arrow.style.transform = 'rotate(180deg)';
+                }
+            }
+        });
+    });
 });

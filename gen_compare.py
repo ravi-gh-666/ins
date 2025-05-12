@@ -12,6 +12,22 @@ model = config['openai']['model']
 # Connect to DB
 conn = sqlite3.connect("/home/ravi/ins/insurance.db")
 conn.row_factory = sqlite3.Row
+
+# Add feature_compare_reports table for feature-level comparison
+conn.execute('''
+CREATE TABLE IF NOT EXISTS feature_compare_reports (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    policy1_id INTEGER,
+    policy2_id INTEGER,
+    feature_name TEXT,
+    report TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(policy1_id) REFERENCES policy(id),
+    FOREIGN KEY(policy2_id) REFERENCES policy(id)
+)
+''')
+conn.commit()
+
 policies = conn.execute("SELECT id, details FROM policy").fetchall()
 
 for i in range(len(policies)):

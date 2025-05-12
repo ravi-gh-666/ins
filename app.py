@@ -190,6 +190,12 @@ def compare():
                 features1_full = {f["name"]: f for f in f1}
                 features2_full = {f["name"]: f for f in f2}
                 all_features = sorted(set(features1) | set(features2))
+                # Fetch feature-level compare reports
+                compare_reports_rows = conn.execute("""
+                    SELECT feature_name, report FROM feature_compare_reports
+                    WHERE (policy1_id=? AND policy2_id=?) OR (policy1_id=? AND policy2_id=?)
+                """, (policy1_id, policy2_id, policy2_id, policy1_id)).fetchall()
+                feature_compare_reports = {row['feature_name']: row['report'] for row in compare_reports_rows}
                 row = conn.execute("SELECT report FROM compare_reports WHERE policy1_id=? AND policy2_id=?", (policy1_id, policy2_id)).fetchone()
                 if not row:
                     row = conn.execute("SELECT report FROM compare_reports WHERE policy1_id=? AND policy2_id=?", (policy2_id, policy1_id)).fetchone()
@@ -223,7 +229,8 @@ def compare():
             selected_policy1=selected_policy1,
             selected_policy2=selected_policy2,
             policy1_details=policy1_details,
-            policy2_details=policy2_details
+            policy2_details=policy2_details,
+            feature_compare_reports=feature_compare_reports if 'feature_compare_reports' in locals() else {}
         )
 
 @app.route("/api/policies/<int:insurer_id>")
