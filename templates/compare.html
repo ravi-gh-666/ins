@@ -10,143 +10,206 @@
             Compare features, scores, and details of top health insurance policies side by side.
         </div>
     </div>
-    <div class="container mx-auto max-w-5xl p-6 bg-white rounded-xl shadow mt-8">
-        <h1 class="sr-only">Insurance Policy Scorecard - Compare</h1>
-        <div class="header text-center text-4xl font-bold py-8 rounded-t-xl mb-8">
-            Compare Health Insurance Policies
+    <form method="POST" action="/compare" class="mb-8 w-full">
+        {{ form.hidden_tag() }}
+        <div class="flex flex-col md:flex-row gap-6 items-start w-full">
+            <div class="flex-1 min-w-0">
+                <label class="google-label" for="insurer1">Insurer 1 <span class="required">*</span></label>
+                <div class="google-select-wrapper">
+                    {{ form.insurer1(class="google-select", id="insurer1") }}
+                    <span class="material-icons google-select-arrow">arrow_drop_down</span>
+                </div>
+                <label class="google-label mt-4" for="policy1">Policy 1 <span class="required">*</span></label>
+                <div class="google-select-wrapper">
+                    {{ form.policy1(class="google-select", id="policy1", **{'data-selected': selected_policy1}) }}
+                    <span class="material-icons google-select-arrow">arrow_drop_down</span>
+                </div>
+            </div>
+            <div class="flex-1 min-w-0">
+                <label class="google-label" for="insurer2">Insurer 2 <span class="required">*</span></label>
+                <div class="google-select-wrapper">
+                    {{ form.insurer2(class="google-select", id="insurer2") }}
+                    <span class="material-icons google-select-arrow">arrow_drop_down</span>
+                </div>
+                <label class="google-label mt-4" for="policy2">Policy 2 <span class="required">*</span></label>
+                <div class="google-select-wrapper">
+                    {{ form.policy2(class="google-select", id="policy2", **{'data-selected': selected_policy2}) }}
+                    <span class="material-icons google-select-arrow">arrow_drop_down</span>
+                </div>
+            </div>
         </div>
-        <form method="POST" action="/compare" class="mb-8 flex flex-col md:flex-row gap-6 items-end" autocomplete="off">
-            {{ form.hidden_tag() }}
-            <div class="flex-1">
-                <h2 class="text-xl font-semibold mb-2">Policy 1</h2>
-                {{ form.insurer1.label(class="block text-base font-medium mb-1") }}
-                {{ form.insurer1(id="insurer1", class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2") }}
-                {{ form.policy1.label(class="block text-base font-medium mb-1") }}
-                <select id="policy1" name="policy1" class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2" data-selected="{{ selected_policy1|default('') }}"></select>
-            </div>
-            <div class="flex-1">
-                <h2 class="text-xl font-semibold mb-2">Policy 2</h2>
-                {{ form.insurer2.label(class="block text-base font-medium mb-1") }}
-                {{ form.insurer2(id="insurer2", class="w-full rounded border border-gray-300 px-3 py-2 mb-3 focus:outline-none focus:ring-2") }}
-                {{ form.policy2.label(class="block text-base font-medium mb-1") }}
-                <select id="policy2" name="policy2" class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2" data-selected="{{ selected_policy2|default('') }}"></select>
-            </div>
-            <div class="flex-basis-full text-center mt-6">
-                <button type="submit" class="action-btn">Compare</button>
-            </div>
-        </form>
-        <div class="mt-8">
-            <h2 class="text-lg font-semibold mb-4">Popular Policy Comparisons</h2>
-            <div class="flex flex-wrap gap-6">
-                {% for left, right in popular_comparisons %}
-                <form method="POST" action="/compare" class="popular-compare-form flex-1 min-w-[300px] max-w-[400px] flex flex-col items-center bg-white rounded-xl shadow p-6 mb-4 cursor-pointer border-2 border-transparent transition hover:shadow-lg" tabindex="0">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="insurer1" value="{{ left['insurer_id'] if left['insurer_id'] is defined else '' }}">
-                    <input type="hidden" name="policy1" value="{{ left['id'] }}">
-                    <input type="hidden" name="insurer2" value="{{ right['insurer_id'] if right['insurer_id'] is defined else '' }}">
-                    <input type="hidden" name="policy2" value="{{ right['id'] }}">
-                    <div class="flex items-center justify-center w-full gap-6 mb-2">
-                        <div class="text-center">
-                            <div class="mb-1">{{ score_ring(left['overall_score']) }}</div>
-                            <div class="font-semibold">{{ left['insurer'] }}<br>{{ left['name'] }}</div>
-                        </div>
-                        <div class="text-2xl text-gray-400 font-bold">vs</div>
-                        <div class="text-center">
-                            <div class="mb-1">{{ score_ring(right['overall_score']) }}</div>
-                            <div class="font-semibold">{{ right['insurer'] }}<br>{{ right['name'] }}</div>
-                        </div>
+        <div class="w-full flex justify-center mt-6">
+            <button type="submit" class="action-btn">Compare</button>
+        </div>
+    </form>
+    <div class="mt-8">
+        <h2 class="text-lg font-semibold mb-4">Popular Policy Comparisons</h2>
+        <div class="flex flex-wrap gap-6">
+            {% for left, right in popular_comparisons %}
+            <form method="POST" action="/compare" class="popular-compare-form flex-1 min-w-[300px] max-w-[400px] flex flex-col items-center bg-white rounded-xl shadow p-6 mb-4 cursor-pointer border-2 border-transparent transition hover:shadow-lg" tabindex="0">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="insurer1" value="{{ left['insurer_id'] if left['insurer_id'] is defined else '' }}">
+                <input type="hidden" name="policy1" value="{{ left['id'] }}">
+                <input type="hidden" name="insurer2" value="{{ right['insurer_id'] if right['insurer_id'] is defined else '' }}">
+                <input type="hidden" name="policy2" value="{{ right['id'] }}">
+                <div class="flex items-center justify-center w-full gap-6 mb-2">
+                    <div class="text-center">
+                        <div class="mb-1">{{ score_ring(left['overall_score']) }}</div>
+                        <div class="font-semibold">{{ left['insurer'] }}<br>{{ left['name'] }}</div>
                     </div>
-                    <div class="w-full text-center text-base text-gray-600 border-t border-gray-200 pt-2 mb-2">
-                        {{ left['insurer'] }} {{ left['name'] }} <span class="bg-gray-100 text-gray-500 rounded-full px-3 py-1 mx-2">vs</span> {{ right['insurer'] }} {{ right['name'] }}
+                    <div class="text-2xl text-gray-400 font-bold">vs</div>
+                    <div class="text-center">
+                        <div class="mb-1">{{ score_ring(right['overall_score']) }}</div>
+                        <div class="font-semibold">{{ right['insurer'] }}<br>{{ right['name'] }}</div>
                     </div>
-                </form>
-                {% endfor %}
-            </div>
+                </div>
+                <div class="w-full text-center text-base text-gray-600 border-t border-gray-200 pt-2 mb-2">
+                    {{ left['insurer'] }} {{ left['name'] }} <span class="bg-gray-100 text-gray-500 rounded-full px-3 py-1 mx-2">vs</span> {{ right['insurer'] }} {{ right['name'] }}
+                </div>
+            </form>
+            {% endfor %}
         </div>
-        {% if policy1 and policy2 %}
-        <div id="compare-anchor"></div>
-        {% if compare_summary %}
-        <div id="compare-summary" tabindex="-1" class="prose max-w-none my-8 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-            <h2 class="text-2xl font-bold mb-4 text-yellow-800">Comparison Summary</h2>
-            {{ compare_summary|safe }}
-        </div>
-        {% endif %}
-        <div id="compare-result" tabindex="-1" class="mt-12">
-          <h2 class="text-2xl font-bold text-center mb-6">Policy Comparison</h2>
-          <table class="min-w-full border border-gray-200 rounded-lg shadow text-base">
-            <thead>
-              <tr class="bg-gray-100">
-                <th class="p-4 text-left">Feature</th>
-                <th class="p-4 text-center">
-                  <div class="text-lg font-bold">{{ policy1['name'] }}</div>
-                  <div class="text-base text-gray-600">{{ policy1['insurer'] }}</div>
-                </th>
-                <th class="p-4 text-center">
-                  <div class="text-lg font-bold">{{ policy2['name'] }}</div>
-                  <div class="text-base text-gray-600">{{ policy2['insurer'] }}</div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="bg-gray-50">
-                <td class="font-semibold">Overall Score</td>
-                <td class="text-center">{{ score_ring(policy1['overall_score']) }}</td>
-                <td class="text-center">{{ score_ring(policy2['overall_score']) }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Insurer Rating</td>
-                <td class="text-center">{{ score_ring(policy1['insurer_rating']) }}</td>
-                <td class="text-center">{{ score_ring(policy2['insurer_rating']) }}</td>
-              </tr>
-              <tr class="bg-gray-50">
-                <td class="font-semibold">Feature Rating</td>
-                <td class="text-center">{{ score_ring(policy1['feature_rating']) }}</td>
-                <td class="text-center">{{ score_ring(policy2['feature_rating']) }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Affordability</td>
-                <td class="text-center">{{ score_ring(policy1['affordability_rating']) }}</td>
-                <td class="text-center">{{ score_ring(policy2['affordability_rating']) }}</td>
-              </tr>
-              {% for feature in all_features %}
-              {% set v1 = features1[feature] if features1 and feature in features1 else None %}
-              {% set v2 = features2[feature] if features2 and feature in features2 else None %}
-              {% set highlight = (v1 != v2 and (v1 in ['Yes','No','yes','no'] or v2 in ['Yes','No','yes','no'])) %}
-              <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-top">
-                <td class="min-w-[220px] max-w-[320px] p-4">
-                  <div class="font-semibold flex items-center gap-2">
-                    {{ feature }}
-                    {% set f1 = (features1_full[feature] if features1_full and feature in features1_full else None) %}
-                    {% set f2 = (features2_full[feature] if features2_full and feature in features2_full else None) %}
-                    {% set yt = f1.youtube_video if f1 and f1.youtube_video else (f2.youtube_video if f2 and f2.youtube_video else None) %}
-                    {% if yt %}
-                    <a href="{{ yt }}" target="_blank" title="Watch feature explanation on YouTube" class="inline-block align-middle">
-                      <img src="https://www.svgrepo.com/show/13671/youtube.svg" alt="YouTube" class="w-6 h-6 ml-1 drop-shadow" />
-                    </a>
-                    {% endif %}
-                  </div>
-                </td>
-                <td class="text-center min-w-[120px] max-w-[220px] p-4">
-                  {% if v1 is not none %}
-                    <span class="compare-highlight {% if highlight %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ v1 }}</span>
-                  {% else %}
-                    <span class="text-gray-400">—</span>
-                  {% endif %}
-                </td>
-                <td class="text-center min-w-[120px] max-w-[220px] p-4">
-                  {% if v2 is not none %}
-                    <span class="compare-highlight {% if highlight %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ v2 }}</span>
-                  {% else %}
-                    <span class="text-gray-400">—</span>
-                  {% endif %}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% endif %}
     </div>
+    {% if policy1 and policy2 %}
+    <div id="compare-anchor"></div>
+    {% if compare_summary %}
+    <div id="compare-summary" tabindex="-1" class="prose max-w-none my-8 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+        <h2 class="text-2xl font-bold mb-4 text-yellow-800">Comparison Summary</h2>
+        {{ compare_summary|safe }}
+    </div>
+    {% endif %}
+    <div id="compare-result" tabindex="-1" class="mt-12">
+      <h2 class="text-2xl font-bold text-center mb-6">Policy Comparison</h2>
+      <table class="min-w-full border border-gray-200 rounded-lg shadow text-base">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-4 text-left">Feature</th>
+            <th class="p-4 text-center">
+              <div class="text-lg font-bold">{{ policy1['name'] }}</div>
+              <div class="text-base text-gray-600">{{ policy1['insurer'] }}</div>
+            </th>
+            <th class="p-4 text-center">
+              <div class="text-lg font-bold">{{ policy2['name'] }}</div>
+              <div class="text-base text-gray-600">{{ policy2['insurer'] }}</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="bg-gray-50">
+            <td class="font-semibold">Overall Score</td>
+            <td class="text-center">{{ score_ring(policy1['overall_score']) }}</td>
+            <td class="text-center">{{ score_ring(policy2['overall_score']) }}</td>
+          </tr>
+          <tr>
+            <td class="font-semibold">Insurer Rating</td>
+            <td class="text-center">{{ score_ring(policy1['insurer_rating']) }}</td>
+            <td class="text-center">{{ score_ring(policy2['insurer_rating']) }}</td>
+          </tr>
+          <tr class="bg-gray-50">
+            <td class="font-semibold">Feature Rating</td>
+            <td class="text-center">{{ score_ring(policy1['feature_rating']) }}</td>
+            <td class="text-center">{{ score_ring(policy2['feature_rating']) }}</td>
+          </tr>
+          <tr>
+            <td class="font-semibold">Affordability</td>
+            <td class="text-center">{{ score_ring(policy1['affordability_rating']) }}</td>
+            <td class="text-center">{{ score_ring(policy2['affordability_rating']) }}</td>
+          </tr>
+          {% for feature in all_features %}
+          {% set v1 = features1[feature] if features1 and feature in features1 else None %}
+          {% set v2 = features2[feature] if features2 and feature in features2 else None %}
+          {% set highlight = (v1 != v2 and (v1 in ['Yes','No','yes','no'] or v2 in ['Yes','No','yes','no'])) %}
+          <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-top">
+            <td class="min-w-[220px] max-w-[320px] p-4">
+              <div class="font-semibold flex items-center gap-2">
+                {{ feature }}
+                {% set f1 = (features1_full[feature] if features1_full and feature in features1_full else None) %}
+                {% set f2 = (features2_full[feature] if features2_full and feature in features2_full else None) %}
+                {% set yt = f1.youtube_video if f1 and f1.youtube_video else (f2.youtube_video if f2 and f2.youtube_video else None) %}
+                {% if yt %}
+                <a href="{{ yt }}" target="_blank" title="Watch feature explanation on YouTube" class="inline-block align-middle">
+                  <img src="https://www.svgrepo.com/show/13671/youtube.svg" alt="YouTube" class="w-6 h-6 ml-1 drop-shadow" />
+                </a>
+                {% endif %}
+              </div>
+            </td>
+            <td class="text-center min-w-[120px] max-w-[220px] p-4">
+              {% if v1 is not none %}
+                <span class="compare-highlight {% if highlight %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ v1 }}</span>
+              {% else %}
+                <span class="text-gray-400">—</span>
+              {% endif %}
+            </td>
+            <td class="text-center min-w-[120px] max-w-[220px] p-4">
+              {% if v2 is not none %}
+                <span class="compare-highlight {% if highlight %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ v2 }}</span>
+              {% else %}
+                <span class="text-gray-400">—</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <h2 style="font-size:0.85rem;letter-spacing:0.08em;font-weight:500;color:#5f6368;text-transform:uppercase;margin-bottom:0.5rem;">Policy Features</h2>
+    <h3 style="font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;">Mandatory Features</h3>
+    {% for feature in mandatory_features %}
+        <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row gap-6 items-stretch">
+            <div class="flex-1 flex flex-col justify-center">
+                <div class="feature-title flex items-center text-base font-semibold mb-2">
+                    <span class="material-icons feature-icon text-blue-700 mr-2">verified_user</span>
+                    {{ feature['FeatureName'] }}
+                </div>
+                <p class="mb-1" style="font-size:1.13rem;line-height:1.7;"><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }} ml-2">{{ feature['FeatureOffered'] }}</span></p>
+                <div class="explanation text-gray-700 mb-1" style="font-size:1.13rem;line-height:1.7;">{{ feature['Explanation'] }}</div>
+                <div class="details text-gray-600 mb-1" style="font-size:1.13rem;line-height:1.7;"><strong>Details:</strong> {{ feature['Details'] }}</div>
+                <div class="why-matters text-blue-700 italic mb-1" style="font-size:1.13rem;line-height:1.7;"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
+                <div class="caveats text-red-600 mb-1" style="font-size:1.13rem;line-height:1.7;"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
+            </div>
+            {% if feature.youtube_video %}
+            <div class="flex-shrink-0 flex items-center justify-center md:w-[360px] w-full mt-4 md:mt-0">
+                <div class="bg-white rounded-lg shadow p-2 w-full max-w-[360px] flex items-center justify-center">
+                    <iframe width="320" height="180"
+                        src="https://www.youtube.com/embed/{{ feature.youtube_video.split('youtu.be/')[-1] }}"
+                        title="YouTube video"
+                        frameborder="0"
+                        allowfullscreen
+                        class="rounded-lg block border border-gray-200 shadow-sm w-full h-[180px]"></iframe>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <h3 style="font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;">Good To Have Features</h3>
+    {% for feature in good_features %}
+        <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row gap-6 items-stretch">
+            <div class="flex-1 flex flex-col justify-center">
+                <div class="feature-title flex items-center text-base font-semibold mb-2">
+                    <span class="material-icons feature-icon text-teal-600 mr-2">star_rate</span>
+                    {{ feature['FeatureName'] }}
+                </div>
+                <p class="mb-1" style="font-size:1.13rem;line-height:1.7;"><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }} ml-2">{{ feature['FeatureOffered'] }}</span></p>
+                <div class="explanation text-gray-700 mb-1" style="font-size:1.13rem;line-height:1.7;">{{ feature['Explanation'] }}</div>
+                <div class="details text-gray-600 mb-1" style="font-size:1.13rem;line-height:1.7;"><strong>Details:</strong> {{ feature['Details'] }}</div>
+                <div class="why-matters text-blue-700 italic mb-1" style="font-size:1.13rem;line-height:1.7;"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
+                <div class="caveats text-red-600 mb-1" style="font-size:1.13rem;line-height:1.7;"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
+            </div>
+            {% if feature.youtube_video %}
+            <div class="flex-shrink-0 flex items-center justify-center md:w-[360px] w-full mt-4 md:mt-0">
+                <div class="bg-white rounded-lg shadow p-2 w-full max-w-[360px] flex items-center justify-center">
+                    <iframe width="320" height="180"
+                        src="https://www.youtube.com/embed/{{ feature.youtube_video.split('youtu.be/')[-1] }}"
+                        title="YouTube video"
+                        frameborder="0"
+                        allowfullscreen
+                        class="rounded-lg block border border-gray-200 shadow-sm w-full h-[180px]"></iframe>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% endif %}
 </div>
 <script src="{{ url_for('static', filename='compare.js') }}"></script>
 {% endblock %}

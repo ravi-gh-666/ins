@@ -16,6 +16,11 @@
             {{ blog['title'] }}
         </div>
         <div class="card bg-white rounded-lg shadow p-6 mb-8">
+            <h2 style="font-size:1.25rem;font-weight:700;color:#222;margin-bottom:1.2rem;text-align:left;">Blog</h2>
+            <div style="font-size:1rem;color:#222;line-height:1.7;margin-bottom:1.1em;text-align:left;">
+                {% if blog['author'] %}<strong>Author:</strong> {{ blog['author'] }}<br>{% endif %}
+                <strong>Date:</strong> {{ blog['created_at'][:10] }}
+            </div>
             <p class="text-gray-600 mb-4">By {{ blog['author'] or 'Anonymous' }} on {{ blog['created_at'][:10] }}</p>
             {% if blog['image'] %}
                 <img src="{{ url_for('blog_image', filename=blog['image']) }}" alt="Blog Image" class="mb-4 rounded-lg shadow" style="max-width:400px;">

@@ -36,30 +36,37 @@
     <div style="margin-bottom: 2.5rem;">
         <div class="flex flex-col md:flex-row gap-6 items-stretch">
             <div class="bg-white rounded-xl shadow p-6 flex flex-col justify-center" style="flex-basis:80%;flex-grow:1;max-width:80%;">
-                <h2 style="font-size:1.25rem;font-weight:700;color:#222;margin-bottom:1.2rem;">Insurer Scores</h2>
-                <div style="font-size:1.08rem;color:#222;">
-                    <strong>Policy:</strong> {{ policy_data['InsurerDetails']['InsurancePolicy'] }}<br>
+                <h2 style="font-size:1.25rem;font-weight:700;color:#222;margin-bottom:1.2rem;text-align:left;">Insurer Scores</h2>
+                <div style="font-size:1rem;color:#222;margin-bottom:1.2em;line-height:1.7;text-align:left;">
                     <strong>Insurer:</strong> {{ policy_data['InsurerDetails']['Insurer'] }}
                 </div>
-                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>3 Year Average CSR:</strong> {{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Value'] }}
+                <p style="font-size:1rem;color:#222;line-height:1.7;margin-bottom:1.1em;text-align:left;">
+                    <strong>3 Year Average CSR:</strong> {{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag'] }}</span>
                 </p>
-                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>Network Hospitals:</strong> {{ policy_data['InsurerDetails']['NetworkHospitals']['Value'] }}
+                <p style="font-size:1rem;color:#222;line-height:1.7;margin-bottom:1.1em;text-align:left;">
+                    <strong>Network Hospitals:</strong> {{ policy_data['InsurerDetails']['NetworkHospitals']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['NetworkHospitals']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['NetworkHospitals']['Tag'] }}</span>
                 </p>
-                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>Volume of Complaints:</strong> {{ policy_data['InsurerDetails']['VolumeOfComplaints']['Value'] }}
+                <p style="font-size:1rem;color:#222;line-height:1.7;margin-bottom:1.1em;text-align:left;">
+                    <strong>Volume of Complaints:</strong> {{ policy_data['InsurerDetails']['VolumeOfComplaints']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['VolumeOfComplaints']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['VolumeOfComplaints']['Tag'] }}</span>
                 </p>
-                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>Solvency Ratio:</strong> {{ policy_data['InsurerDetails']['SolvencyRatio']['Value'] }}
+                <p style="font-size:1rem;color:#222;line-height:1.7;margin-bottom:1.1em;text-align:left;">
+                    <strong>Solvency Ratio:</strong> {{ policy_data['InsurerDetails']['SolvencyRatio']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['SolvencyRatio']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['SolvencyRatio']['Tag'] }}</span>
                 </p>
-                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>Pay-Out Ratio:</strong> {{ policy_data['InsurerDetails']['PayOutRatio']['Value'] }}
+                <p style="font-size:1rem;color:#222;line-height:1.7;margin-bottom:1.1em;text-align:left;">
+                    <strong>Pay-Out Ratio:</strong> {{ policy_data['InsurerDetails']['PayOutRatio']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['PayOutRatio']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['PayOutRatio']['Tag'] }}</span>
                 </p>
             </div>
             {% if scores %}
             <div class="bg-white rounded-xl shadow p-6 flex flex-col justify-center items-center" style="flex-basis:20%;flex-grow:0;max-width:20%;min-width:180px;">
                 <div class="font-semibold mb-2 text-gray-700" style="font-size:1.08rem;color:#444;">Policy Scores</div>
+                <div style="font-size:1.08rem;color:#222;margin-bottom:1.2em;text-align:left;">
+                    <strong>Policy:</strong> {{ policy_data['InsurerDetails']['InsurancePolicy'] }}
+                </div>
                 {% set score_items = [
                     ('Overall', scores['overall_score']),
                     ('Insurer', scores['insurer_rating']),
@@ -82,48 +89,56 @@
         <h2 style="font-size:0.85rem;letter-spacing:0.08em;font-weight:500;color:#5f6368;text-transform:uppercase;margin-bottom:0.5rem;">Policy Features</h2>
         <h3 style="font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;">Mandatory Features</h3>
         {% for feature in mandatory_features %}
-            <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4">
-                <div class="feature-title flex items-center text-base font-semibold mb-2">
-                    <span class="material-icons feature-icon text-blue-700 mr-2">verified_user</span>
-                    {{ feature['FeatureName'] }}
+            <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row gap-6 items-stretch">
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="feature-title flex items-center text-base font-semibold mb-2">
+                        <span class="material-icons feature-icon text-blue-700 mr-2">verified_user</span>
+                        {{ feature['FeatureName'] }}
+                    </div>
+                    <p class="mb-1"><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }} ml-2">{{ feature['FeatureOffered'] }}</span></p>
+                    <div class="explanation text-gray-700 mb-1">{{ feature['Explanation'] }}</div>
+                    <div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature['Details'] }}</div>
+                    <div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
+                    <div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
                 </div>
-                <p class="mb-1"><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }} ml-2">{{ feature['FeatureOffered'] }}</span></p>
-                <div class="explanation text-gray-700 mb-1">{{ feature['Explanation'] }}</div>
-                <div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature['Details'] }}</div>
-                <div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
-                <div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
                 {% if feature.youtube_video %}
-                <div class="my-3">
-                    <iframe width="360" height="203"
-                        src="https://www.youtube.com/embed/{{ feature.youtube_video.split('youtu.be/')[-1] }}"
-                        title="YouTube video"
-                        frameborder="0"
-                        allowfullscreen
-                        class="rounded-lg block border border-gray-200 shadow-sm"></iframe>
+                <div class="flex-shrink-0 flex items-center justify-center md:w-[360px] w-full mt-4 md:mt-0">
+                    <div class="bg-white rounded-lg shadow p-2 w-full max-w-[360px] flex items-center justify-center">
+                        <iframe width="320" height="180"
+                            src="https://www.youtube.com/embed/{{ feature.youtube_video.split('youtu.be/')[-1] }}"
+                            title="YouTube video"
+                            frameborder="0"
+                            allowfullscreen
+                            class="rounded-lg block border border-gray-200 shadow-sm w-full h-[180px]"></iframe>
+                    </div>
                 </div>
                 {% endif %}
             </div>
         {% endfor %}
-        <h3 class="mt-6 mb-2">Good To Have Features</h3>
+        <h3 style="font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;">Good To Have Features</h3>
         {% for feature in good_features %}
-            <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4">
-                <div class="feature-title flex items-center text-base font-semibold mb-2">
-                    <span class="material-icons feature-icon text-teal-600 mr-2">star_rate</span>
-                    {{ feature['FeatureName'] }}
+            <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row gap-6 items-stretch">
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="feature-title flex items-center text-base font-semibold mb-2">
+                        <span class="material-icons feature-icon text-teal-600 mr-2">star_rate</span>
+                        {{ feature['FeatureName'] }}
+                    </div>
+                    <p class="mb-1"><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }} ml-2">{{ feature['FeatureOffered'] }}</span></p>
+                    <div class="explanation text-gray-700 mb-1">{{ feature['Explanation'] }}</div>
+                    <div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature['Details'] }}</div>
+                    <div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
+                    <div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
                 </div>
-                <p class="mb-1"><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }} ml-2">{{ feature['FeatureOffered'] }}</span></p>
-                <div class="explanation text-gray-700 mb-1">{{ feature['Explanation'] }}</div>
-                <div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature['Details'] }}</div>
-                <div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
-                <div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
                 {% if feature.youtube_video %}
-                <div class="my-3">
-                    <iframe width="360" height="203"
-                        src="https://www.youtube.com/embed/{{ feature.youtube_video.split('youtu.be/')[-1] }}"
-                        title="YouTube video"
-                        frameborder="0"
-                        allowfullscreen
-                        class="rounded-lg block border border-gray-200 shadow-sm"></iframe>
+                <div class="flex-shrink-0 flex items-center justify-center md:w-[360px] w-full mt-4 md:mt-0">
+                    <div class="bg-white rounded-lg shadow p-2 w-full max-w-[360px] flex items-center justify-center">
+                        <iframe width="320" height="180"
+                            src="https://www.youtube.com/embed/{{ feature.youtube_video.split('youtu.be/')[-1] }}"
+                            title="YouTube video"
+                            frameborder="0"
+                            allowfullscreen
+                            class="rounded-lg block border border-gray-200 shadow-sm w-full h-[180px]"></iframe>
+                    </div>
                 </div>
                 {% endif %}
             </div>
