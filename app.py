@@ -121,6 +121,8 @@ def scorecard():
         mandatory_features = [f for f in policy_data["PolicyFeatures"] if f.get("category", "Good To Have") == "Mandatory"]
         good_features = [f for f in policy_data["PolicyFeatures"] if f.get("category", "Good To Have") != "Mandatory"]
 
+    form.insurer.data = int(selected_insurer_id) if selected_insurer_id else None
+    form.policy.data = int(selected_policy_id) if selected_policy_id else None
     return render_template(
         "scorecard.html",
         insurers=insurers,

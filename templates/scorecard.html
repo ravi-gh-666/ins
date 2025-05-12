@@ -23,7 +23,7 @@
             <div class="flex-1 min-w-0">
                 <label class="google-label" for="policy">Policy <span class="required">*</span></label>
                 <div class="google-select-wrapper">
-                    {{ form.policy(class="google-select", id="policy") }}
+                    {{ form.policy(class="google-select", id="policy", **{'data-selected': selected_policy_id}) }}
                     <span class="material-icons google-select-arrow">arrow_drop_down</span>
                 </div>
             </div>
@@ -34,43 +34,41 @@
     </form>
     {% if policy_data['InsurerDetails'] %}
     <div style="margin-bottom: 2.5rem;">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-            <div class="flex-1">
-                <h2>{{ policy_data['InsurerDetails']['InsurancePolicy'] }} by {{ policy_data['InsurerDetails']['Insurer'] }}</h2>
-                <p class="mb-1"><strong>3 Year Average CSR:</strong> {{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Value'] }}
+        <div class="flex flex-col md:flex-row gap-6 items-stretch">
+            <div class="flex-1 bg-white rounded-xl shadow p-6 flex flex-col justify-center">
+                <h2 style="font-size:1.25rem;font-weight:500;color:#444;margin-bottom:1.2rem;">{{ policy_data['InsurerDetails']['InsurancePolicy'] }} by {{ policy_data['InsurerDetails']['Insurer'] }}</h2>
+                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>3 Year Average CSR:</strong> {{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag'] }}</span>
                 </p>
-                <p class="mb-1"><strong>Network Hospitals:</strong> {{ policy_data['InsurerDetails']['NetworkHospitals']['Value'] }}
+                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>Network Hospitals:</strong> {{ policy_data['InsurerDetails']['NetworkHospitals']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['NetworkHospitals']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['NetworkHospitals']['Tag'] }}</span>
                 </p>
-                <p class="mb-1"><strong>Volume of Complaints:</strong> {{ policy_data['InsurerDetails']['VolumeOfComplaints']['Value'] }}
+                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>Volume of Complaints:</strong> {{ policy_data['InsurerDetails']['VolumeOfComplaints']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['VolumeOfComplaints']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['VolumeOfComplaints']['Tag'] }}</span>
                 </p>
-                <p class="mb-1"><strong>Solvency Ratio:</strong> {{ policy_data['InsurerDetails']['SolvencyRatio']['Value'] }}
+                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>Solvency Ratio:</strong> {{ policy_data['InsurerDetails']['SolvencyRatio']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['SolvencyRatio']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['SolvencyRatio']['Tag'] }}</span>
                 </p>
-                <p class="mb-1"><strong>Pay-Out Ratio:</strong> {{ policy_data['InsurerDetails']['PayOutRatio']['Value'] }}
+                <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>Pay-Out Ratio:</strong> {{ policy_data['InsurerDetails']['PayOutRatio']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['PayOutRatio']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['PayOutRatio']['Tag'] }}</span>
                 </p>
             </div>
             {% if scores %}
-            <div class="min-w-[220px] mt-6 md:mt-0">
-                <div class="bg-white rounded-xl shadow p-6 text-center">
-                    <div class="font-semibold mb-2 text-gray-700">Policy Scores</div>
-                    {% set score_items = [
-                        ('Overall', scores['overall_score']),
-                        ('Insurer', scores['insurer_rating']),
-                        ('Features', scores['feature_rating']),
-                        ('Affordability', scores['affordability_rating'])
-                    ] %}
-                    <div class="flex flex-col gap-3">
-                    {% for label, value in score_items %}
-                        <div class="flex items-center justify-end gap-3">
-                            <span class="text-base text-gray-600 min-w-[90px] text-right font-bold">{{ label }}</span>
-                            {{ score_ring(value) }}
-                        </div>
-                    {% endfor %}
+            <div class="flex-1 bg-white rounded-xl shadow p-6 flex flex-col justify-center items-center">
+                <div class="font-semibold mb-2 text-gray-700" style="font-size:1.08rem;color:#444;">Policy Scores</div>
+                {% set score_items = [
+                    ('Overall', scores['overall_score']),
+                    ('Insurer', scores['insurer_rating']),
+                    ('Features', scores['feature_rating']),
+                    ('Affordability', scores['affordability_rating'])
+                ] %}
+                <div class="flex flex-col gap-3 w-full max-w-[220px] mx-auto">
+                {% for label, value in score_items %}
+                    <div class="flex items-center justify-between gap-3">
+                        <span style="font-size:1.08rem;color:#222;font-weight:500;">{{ label }}</span>
+                        {{ score_ring(value) }}
                     </div>
+                {% endfor %}
                 </div>
             </div>
             {% endif %}
@@ -134,4 +132,28 @@
     </div>
     {% endif %}
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const insurerSelect = document.getElementById('insurer');
+    const policySelect = document.getElementById('policy');
+    const selectedPolicy = policySelect.getAttribute('data-selected');
+    insurerSelect.addEventListener('change', function() {
+        fetch(`/api/policies/${insurerSelect.value}`)
+            .then(res => res.json())
+            .then(policies => {
+                policySelect.innerHTML = '';
+                policies.forEach(function(policy) {
+                    const opt = document.createElement('option');
+                    opt.value = policy.id;
+                    opt.textContent = policy.name;
+                    if (String(policy.id) === String(selectedPolicy)) {
+                        opt.selected = true;
+                    }
+                    policySelect.appendChild(opt);
+                });
+            });
+    });
+});
+</script>
+<script src="{{ url_for('static', filename='scorecard.js') }}"></script>
 {% endblock %}
