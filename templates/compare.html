@@ -116,27 +116,61 @@
               <td class="text-center font-normal align-middle">{{ score_ring(policy1['affordability_rating']) }}</td>
               <td class="text-center font-normal align-middle">{{ score_ring(policy2['affordability_rating']) }}</td>
             </tr>
-            {% for feature in all_features %}
-            {% set v1 = features1[feature] if features1 and feature in features1 else None %}
-            {% set v2 = features2[feature] if features2 and feature in features2 else None %}
-            {% set highlight = (v1 != v2 and (v1 in ['Yes','No','yes','no'] or v2 in ['Yes','No','yes','no'])) %}
-            <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-middle">
-              <td class="min-w-[220px] max-w-[320px] p-4 font-normal text-left align-middle" style="padding-left:2em;">{{ feature }}</td>
-              <td class="text-center min-w-[120px] max-w-[220px] p-4 font-normal align-middle">
-                {% if v1 is not none %}
-                  <span class="compare-highlight {% if highlight %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ v1 }}</span>
-                {% else %}
-                  <span class="text-gray-400">—</span>
-                {% endif %}
-              </td>
-              <td class="text-center min-w-[120px] max-w-[220px] p-4 font-normal align-middle">
-                {% if v2 is not none %}
-                  <span class="compare-highlight {% if highlight %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ v2 }}</span>
-                {% else %}
-                  <span class="text-gray-400">—</span>
-                {% endif %}
-              </td>
+            <!-- Mandatory Features Heading -->
+            <tr class="bg-blue-50">
+              <td colspan="3" class="font-bold text-lg text-blue-900 p-4">Mandatory Features</td>
             </tr>
+            {% for feature in all_features %}
+              {% set is_mandatory = features1_full[feature]['category'] == 'Mandatory' if features1_full and feature in features1_full and features1_full[feature]['category'] else (features2_full[feature]['category'] == 'Mandatory' if features2_full and feature in features2_full and features2_full[feature]['category'] else False) %}
+              {% if is_mandatory %}
+                <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-middle">
+                  <td class="min-w-[220px] max-w-[320px] p-4 font-normal text-left align-middle" style="padding-left:2em;">{{ feature }}</td>
+                  <td class="text-center min-w-[120px] max-w-[220px] p-4 font-normal align-middle">
+                    {% set offered1 = features1[feature] if features1 and feature in features1 else None %}
+                    {% if offered1 is not none %}
+                      <span class="compare-highlight {% if (offered1 != (features2[feature] if features2 and feature in features2 else None)) and (offered1 in ['Yes','No','yes','no'] or (features2[feature] if features2 and feature in features2 else None) in ['Yes','No','yes','no']) %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ offered1 }}</span>
+                    {% else %}
+                      <span class="text-gray-400">—</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-center min-w-[120px] max-w-[220px] p-4 font-normal align-middle">
+                    {% set offered2 = features2[feature] if features2 and feature in features2 else None %}
+                    {% if offered2 is not none %}
+                      <span class="compare-highlight {% if (offered2 != (features1[feature] if features1 and feature in features1 else None)) and (offered2 in ['Yes','No','yes','no'] or (features1[feature] if features1 and feature in features1 else None) in ['Yes','No','yes','no']) %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ offered2 }}</span>
+                    {% else %}
+                      <span class="text-gray-400">—</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+            <!-- Good to Have Features Heading -->
+            <tr class="bg-green-50">
+              <td colspan="3" class="font-bold text-lg text-green-900 p-4">Good to Have Features</td>
+            </tr>
+            {% for feature in all_features %}
+              {% set is_good = features1_full[feature]['category'] != 'Mandatory' if features1_full and feature in features1_full and features1_full[feature]['category'] else (features2_full[feature]['category'] != 'Mandatory' if features2_full and feature in features2_full and features2_full[feature]['category'] else True) %}
+              {% if is_good %}
+                <tr class="{{ loop.index0 % 2 == 0 and 'bg-gray-50' or '' }} align-middle">
+                  <td class="min-w-[220px] max-w-[320px] p-4 font-normal text-left align-middle" style="padding-left:2em;">{{ feature }}</td>
+                  <td class="text-center min-w-[120px] max-w-[220px] p-4 font-normal align-middle">
+                    {% set offered1 = features1[feature] if features1 and feature in features1 else None %}
+                    {% if offered1 is not none %}
+                      <span class="compare-highlight {% if (offered1 != (features2[feature] if features2 and feature in features2 else None)) and (offered1 in ['Yes','No','yes','no'] or (features2[feature] if features2 and feature in features2 else None) in ['Yes','No','yes','no']) %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ offered1 }}</span>
+                    {% else %}
+                      <span class="text-gray-400">—</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-center min-w-[120px] max-w-[220px] p-4 font-normal align-middle">
+                    {% set offered2 = features2[feature] if features2 and feature in features2 else None %}
+                    {% if offered2 is not none %}
+                      <span class="compare-highlight {% if (offered2 != (features1[feature] if features1 and feature in features1 else None)) and (offered2 in ['Yes','No','yes','no'] or (features1[feature] if features1 and feature in features1 else None) in ['Yes','No','yes','no']) %}bg-pink-100 text-pink-800 font-semibold rounded px-3 py-1{% endif %}">{{ offered2 }}</span>
+                    {% else %}
+                      <span class="text-gray-400">—</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endif %}
             {% endfor %}
           </tbody>
         </table>
