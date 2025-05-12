@@ -35,8 +35,12 @@
     {% if policy_data['InsurerDetails'] %}
     <div style="margin-bottom: 2.5rem;">
         <div class="flex flex-col md:flex-row gap-6 items-stretch">
-            <div class="flex-1 bg-white rounded-xl shadow p-6 flex flex-col justify-center">
-                <h2 style="font-size:1.25rem;font-weight:500;color:#444;margin-bottom:1.2rem;">{{ policy_data['InsurerDetails']['InsurancePolicy'] }} by {{ policy_data['InsurerDetails']['Insurer'] }}</h2>
+            <div class="bg-white rounded-xl shadow p-6 flex flex-col justify-center" style="flex-basis:80%;flex-grow:1;max-width:80%;">
+                <h2 style="font-size:1.25rem;font-weight:700;color:#222;margin-bottom:1.2rem;">Insurer Scores</h2>
+                <div style="font-size:1.08rem;color:#222;">
+                    <strong>Policy:</strong> {{ policy_data['InsurerDetails']['InsurancePolicy'] }}<br>
+                    <strong>Insurer:</strong> {{ policy_data['InsurerDetails']['Insurer'] }}
+                </div>
                 <p class="mb-1" style="font-size:1.08rem;color:#222;"><strong>3 Year Average CSR:</strong> {{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Value'] }}
                     <span class="tag {{ get_score_color(policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag']) }} ml-2">{{ policy_data['InsurerDetails']['ThreeYearAverageCSR']['Tag'] }}</span>
                 </p>
@@ -54,7 +58,7 @@
                 </p>
             </div>
             {% if scores %}
-            <div class="flex-1 bg-white rounded-xl shadow p-6 flex flex-col justify-center items-center">
+            <div class="bg-white rounded-xl shadow p-6 flex flex-col justify-center items-center" style="flex-basis:20%;flex-grow:0;max-width:20%;min-width:180px;">
                 <div class="font-semibold mb-2 text-gray-700" style="font-size:1.08rem;color:#444;">Policy Scores</div>
                 {% set score_items = [
                     ('Overall', scores['overall_score']),
@@ -75,8 +79,8 @@
         </div>
     </div>
     <div style="margin-bottom: 2.5rem;">
-        <h2>Policy Features</h2>
-        <h3>Mandatory Features</h3>
+        <h2 style="font-size:0.85rem;letter-spacing:0.08em;font-weight:500;color:#5f6368;text-transform:uppercase;margin-bottom:0.5rem;">Policy Features</h2>
+        <h3 style="font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;">Mandatory Features</h3>
         {% for feature in mandatory_features %}
             <div class="card bg-gray-50 rounded-lg shadow-sm p-4 mb-4">
                 <div class="feature-title flex items-center text-base font-semibold mb-2">
