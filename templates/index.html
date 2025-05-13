@@ -29,7 +29,7 @@
             </thead>
             <tbody>
                 {% for plan in top_plans %}
-                <tr class="border-b border-gray-100">
+                <tr class="border-b border-gray-100 top-plan-row cursor-pointer" data-insurer="{{ plan['insurer'] }}" data-policy="{{ plan['name'] }}">
                     <td class="p-4 text-left font-semibold">
                         {{ plan['name'] }}<br><span class="text-base text-gray-500">{{ plan['insurer'] }}</span>
                     </td>
@@ -42,5 +42,8 @@
             </tbody>
         </table>
     </div>
+    <div id="scorecard-section" style="display:none; margin-top: 48px;"></div>
 </div>
+<!-- Move JS to static/index.js and load it externally for CSP compliance -->
+<script src="{{ url_for('static', filename='index.js') }}"></script>
 {% endblock %}

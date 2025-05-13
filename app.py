@@ -252,6 +252,42 @@ def api_policy(policy_id):
         }
         return jsonify(policy_data)
 
+@app.route("/api/scorecard_by_name")
+def api_scorecard_by_name():
+    insurer = request.args.get('insurer')
+    policy = request.args.get('policy')
+    if not insurer or not policy:
+        return jsonify({'error': 'Missing insurer or policy'}), 400
+    with get_db_connection() as conn:
+        policy_row = conn.execute("SELECT * FROM policy WHERE name=? AND insurer_id=(SELECT id FROM insurer WHERE name=?)", (policy, insurer)).fetchone()
+        if not policy_row:
+            return jsonify({'error': 'Policy not found'}), 404
+        features = conn.execute("SELECT * FROM feature WHERE policy_id=?", (policy_row['id'],)).fetchall()
+        scores = {
+            'overall_score': policy_row['overall_score'],
+            'insurer_rating': policy_row['insurer_rating'],
+            'feature_rating': policy_row['feature_rating'],
+            'affordability_rating': policy_row['affordability_rating']
+        }
+        policy_data = {
+            "InsurerDetails": json.loads(policy_row["details"]),
+            "PolicyFeatures": [dict(f) for f in features]
+        }
+        for f in policy_data["PolicyFeatures"]:
+            f["FeatureName"] = f["name"]
+            f["FeatureOffered"] = f["offered"]
+            f["Explanation"] = f["explanation"]
+            f["Details"] = f["details"]
+            f["Caveats"] = f["caveats"]
+        mandatory_features = [f for f in policy_data["PolicyFeatures"] if f.get("category", "Good To Have") == "Mandatory"]
+        good_features = [f for f in policy_data["PolicyFeatures"] if f.get("category", "Good To Have") != "Mandatory"]
+        return jsonify({
+            'policy_data': policy_data,
+            'scores': scores,
+            'mandatory_features': mandatory_features,
+            'good_features': good_features
+        })
+
 @app.route('/blog')
 def blog_list():
     conn = get_db_connection()
