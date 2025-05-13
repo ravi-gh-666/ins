@@ -41,6 +41,9 @@ class BlogForm(FlaskForm):
     author = StringField('Author', validators=[Length(max=100)])
     image = FileField('Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')])
 
+class PersonalizeForm(FlaskForm):
+    category = SelectField('Category', choices=[])
+
 BLOG_UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'blog_images')
 os.makedirs(BLOG_UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = BLOG_UPLOAD_FOLDER
@@ -232,6 +235,31 @@ def compare():
             policy2_details=policy2_details,
             feature_compare_reports=feature_compare_reports if 'feature_compare_reports' in locals() else {}
         )
+
+@app.route("/personalize", methods=["GET", "POST"])
+def personalize():
+    categories = [
+        ("Family", "Family"),
+        ("Senior Citizen", "Senior Citizen"),
+        ("Critical Illness", "Critical Illness"),
+        ("Maternity", "Maternity"),
+        ("Budget", "Budget")
+    ]
+    form = PersonalizeForm()
+    form.category.choices = categories
+    selected_category = form.category.data or request.form.get('category') or 'Family'
+    with get_db_connection() as conn:
+        rows = conn.execute('''
+            SELECT c.category, p.name as policy_name, i.name as insurer, p.overall_score, p.insurer_rating, p.feature_rating, p.affordability_rating
+            FROM custom_category_top_policies c
+            JOIN policy p ON c.policy_id = p.id
+            JOIN insurer i ON c.insurer_id = i.id
+            WHERE c.category = ?
+            ORDER BY c.score DESC, p.overall_score DESC
+            LIMIT 5
+        ''', (selected_category,)).fetchall()
+        top_plans = [dict(row) for row in rows]
+    return render_template("personalize.html", categories=categories, selected_category=selected_category, top_plans=top_plans, form=form)
 
 @app.route("/api/policies/<int:insurer_id>")
 @limiter.limit("30/minute")

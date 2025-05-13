@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Personalized Top Health Insurance Plans{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="main-hero" style="margin-top: 120px; margin-bottom: 72px;">
+        <h1 style="font-family:'Roboto','Arial',sans-serif;font-size:3.5rem;font-weight:700;line-height:1.08;letter-spacing:-.01em;margin-bottom:0.5em;">
+            <span style="color:#4285f4;display:block;">Personalize</span>
+            <span style="color:#34a853;display:block;">Your Health Insurance</span>
+        </h1>
+        <div class="subheadline" style="font-family:'Roboto','Arial',sans-serif;font-size:1.5rem;color:#444;font-weight:400;line-height:1.4;margin-bottom:2.8rem;max-width:600px;margin-left:auto;margin-right:auto;">
+            Select a category to see the best health insurance plans for your needs.
+        </div>
+    </div>
+    <form method="post" class="mb-8 w-full flex flex-col md:flex-row gap-6 items-center justify-center">
+        {{ form.hidden_tag() }}
+        <label class="google-label" for="category">Category <span class="required">*</span></label>
+        <div class="google-select-wrapper">
+            <select name="category" id="category" class="google-select">
+                {% for value, label in categories %}
+                    <option value="{{ value }}" {% if value == selected_category %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <span class="material-icons google-select-arrow">arrow_drop_down</span>
+        </div>
+    </form>
+    {% if top_plans %}
+    <div class="card bg-white rounded-lg shadow p-6 mt-8" style="font-family:'Roboto','Arial',sans-serif;font-size:1.13rem;line-height:1.6;">
+        <h2 style="font-size:1.25rem;font-weight:700;color:#222;margin-bottom:1.2rem;text-align:left;">Top 5 Plans for {{ selected_category }}</h2>
+        <table class="min-w-full border border-gray-200 rounded-lg shadow text-base" style="font-size:1.08rem;">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-4 text-left">Top Health Plans</th>
+                    <th class="p-4 text-center">Insurer Rating</th>
+                    <th class="p-4 text-center">Feature Rating</th>
+                    <th class="p-4 text-center">Affordability</th>
+                    <th class="p-4 text-center">Final Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in top_plans %}
+                <tr class="border-b border-gray-100 top-plan-row cursor-pointer">
+                    <td class="p-4 text-left font-semibold">
+                        {{ plan['policy_name'] }}<br><span class="text-base text-gray-500">{{ plan['insurer'] }}</span>
+                    </td>
+                    <td class="text-center">{{ score_ring(plan['insurer_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['feature_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['affordability_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['overall_score']) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="card bg-red-50 text-center text-red-700 font-semibold py-8 mt-8">
+        No plans found for the selected category.
+    </div>
+    {% endif %}
+    <div id="scorecard-section" style="display:none; margin-top: 48px;"></div>
+</div>
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+<script src="{{ url_for('static', filename='personalize.js') }}"></script>
+{% endblock %}
