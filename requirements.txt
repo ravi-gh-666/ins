@@ -1,4 +1,9 @@
 Flask
+Flask-WTF
+Flask-Limiter
+WTForms
+Werkzeug
+bleach
 openai
 configparser
-flask-wtf
+gunicorn
