@@ -68,9 +68,9 @@ function renderScorecard(data) {
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.top-plan-row').forEach(function(row) {
         row.addEventListener('click', function() {
-            console.log('Row clicked', this); // Debug log
             const insurer = this.getAttribute('data-insurer');
             const policy = this.getAttribute('data-policy');
+            if (!insurer || !policy) return;
             fetch(`/api/scorecard_by_name?insurer=${encodeURIComponent(insurer)}&policy=${encodeURIComponent(policy)}`)
                 .then(res => res.json())
                 .then(data => {
