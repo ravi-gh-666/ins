@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Insurance Policy Scorecard{% endblock %}
+{% block content %}
+<div class="container">
+    <form method="get" action="" style="text-align:right; margin-top: 24px;">
+        <label for="lang" style="font-weight:600;">Language:</label>
+        <select name="lang" id="lang" class="google-select" style="width:auto;display:inline;">
+            <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+            <option value="hi" {% if lang == 'hi' %}selected{% endif %}>हिन्दी</option>
+            <option value="kn" {% if lang == 'kn' %}selected{% endif %}>ಕನ್ನಡ</option>
+        </select>
+    </form>
+    <div class="main-hero" style="margin-top: 80px; margin-bottom: 72px;">
+        <h1 style="font-family:'Roboto','Arial',sans-serif;font-size:3.5rem;font-weight:700;line-height:1.08;letter-spacing:-.01em;margin-bottom:0.5em;">
+            <span style="color:#4285f4;display:block;">
+                {% if lang == 'hi' %}इंश्योरेंस में आपका स्वागत है{% elif lang == 'kn' %}ವಿಮೆ ಪೋರ್ಟಲ್‌ಗೆ ಸ್ವಾಗತ{% else %}Welcome to the Insurance{% endif %}
+            </span>
+            <span style="color:#34a853;display:block;">
+                {% if lang == 'hi' %}पोर्टल{% elif lang == 'kn' %}ಪೋರ್ಟಲ್{% else %}Portal{% endif %}
+            </span>
+        </h1>
+        <div class="subheadline" style="font-family:'Roboto','Arial',sans-serif;font-size:1.5rem;color:#444;font-weight:400;line-height:1.4;margin-bottom:2.8rem;max-width:600px;margin-left:auto;margin-right:auto;">
+            {% if lang == 'hi' %}
+                तुलना करें, विश्लेषण करें, और अपने और अपने परिवार के लिए सबसे अच्छी स्वास्थ्य बीमा पॉलिसी चुनें।
+            {% elif lang == 'kn' %}
+                ಹೋಲಿಸಿ, ವಿಶ್ಲೇಷಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಮತ್ತು ನಿಮ್ಮ ಕುಟುಂಬದಿಗಾಗಿ ಉತ್ತಮ ಆರೋಗ್ಯ ವಿಮಾ ಯೋಜನೆ ಆಯ್ಕೆಮಾಡಿ.
+            {% else %}
+                Compare, analyze, and choose the best health insurance policies for you and your family.
+            {% endif %}
+        </div>
+        <div style="display:flex;justify-content:center;gap:18px;margin-bottom:3.2rem;">
+            <a href="/scorecard?lang={{ lang }}" class="action-btn">
+                {% if lang == 'hi' %}स्कोरकार्ड देखें{% elif lang == 'kn' %}ಸ್ಕೋರ್ಕಾರ್ಡ್ ನೋಡಿ{% else %}Go to Scorecard{% endif %}
+            </a>
+            <a href="/compare?lang={{ lang }}" class="action-btn outline">
+                {% if lang == 'hi' %}पॉलिसी तुलना करें{% elif lang == 'kn' %}ಪಾಲಿಸಿ ಹೋಲಿಸಿ{% else %}Compare Policies{% endif %}
+            </a>
+        </div>
+    </div>
+    <div class="card bg-white rounded-lg shadow p-6 mt-8" style="font-family:'Roboto','Arial',sans-serif;font-size:1.13rem;line-height:1.6;">
+        <h2 style="font-size:1.25rem;font-weight:700;color:#222;margin-bottom:1.2rem;text-align:left;">
+            {% if lang == 'hi' %}भारत में सर्वश्रेष्ठ स्वास्थ्य बीमा योजनाएँ 2025{% elif lang == 'kn' %}ಭಾರತದ ಅತ್ಯುತ್ತಮ ಆರೋಗ್ಯ ವಿಮಾ ಯೋಜನೆಗಳು 2025{% else %}Best Health Insurance Plans in India 2025{% endif %}
+        </h2>
+        <table class="min-w-full border border-gray-200 rounded-lg shadow text-base" style="font-size:1.08rem;">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-4 text-left">
+                        {% if lang == 'hi' %}शीर्ष स्वास्थ्य योजनाएँ{% elif lang == 'kn' %}ಅತ್ಯುತ್ತಮ ಆರೋಗ್ಯ ಯೋಜನೆಗಳು{% else %}Top Health Plans{% endif %}
+                    </th>
+                    <th class="p-4 text-center">
+                        {% if lang == 'hi' %}बीमाकर्ता रेटिंग{% elif lang == 'kn' %}ವಿಮಾ ರೇಟಿಂಗ್{% else %}Insurer Rating{% endif %}
+                    </th>
+                    <th class="p-4 text-center">
+                        {% if lang == 'hi' %}फीचर रेटिंग{% elif lang == 'kn' %}ವೈಶಿಷ್ಟ್ಯ ರೇಟಿಂಗ್{% else %}Feature Rating{% endif %}
+                    </th>
+                    <th class="p-4 text-center">
+                        {% if lang == 'hi' %}सुलभता{% elif lang == 'kn' %}ವೈಶಿಷ್ಟ್ಯತೆ{% else %}Affordability{% endif %}
+                    </th>
+                    <th class="p-4 text-center">
+                        {% if lang == 'hi' %}अंतिम रेटिंग{% elif lang == 'kn' %}ಅಂತಿಮ ರೇಟಿಂಗ್{% else %}Final Rating{% endif %}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in top_plans %}
+                <tr class="border-b border-gray-100 top-plan-row cursor-pointer" data-insurer="{{ plan['insurer'] }}" data-policy="{{ plan['name'] }}">
+                    <td class="p-4 text-left font-semibold">
+                        {{ plan['name'] }}<br><span class="text-base text-gray-500">{{ plan['insurer'] }}</span>
+                    </td>
+                    <td class="text-center">{{ score_ring(plan['insurer_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['feature_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['affordability_rating']) }}</td>
+                    <td class="text-center">{{ score_ring(plan['overall_score']) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="scorecard-section" style="display:none; margin-top: 48px;"></div>
+</div>
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+{% endblock %}
