@@ -5,4 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
             this.form.submit();
         });
     }
+    // Focus and scroll to plans table if present
+    var plansTable = document.getElementById('plans-table');
+    if (plansTable) {
+        plansTable.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        plansTable.focus();
+    }
 });
