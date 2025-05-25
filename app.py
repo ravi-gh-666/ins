@@ -75,6 +75,14 @@ def get_popular_comparisons():
 
 @app.route("/")
 def home():
+    lang = request.args.get('lang', 'en')
+    translations = {}
+    if lang == 'kn':
+        try:
+            with open(os.path.join(app.root_path, 'static', 'translations_kn.json'), encoding='utf-8') as f:
+                translations = json.load(f)
+        except Exception as e:
+            print(f"[DEBUG] Could not load Kannada translations: {e}")
     with get_db_connection() as conn:
         plans = conn.execute(
             "SELECT p.name, p.overall_score, p.insurer_rating, p.feature_rating, p.affordability_rating, i.name as insurer "
@@ -82,7 +90,7 @@ def home():
             "ORDER BY p.overall_score DESC LIMIT 5"
         ).fetchall()
         top_plans = [dict(plan) for plan in plans]
-    return render_template("index.html", top_plans=top_plans)
+    return render_template("index.html", top_plans=top_plans, translations=translations, lang=lang)
 
 @app.route("/scorecard", methods=["GET", "POST"])
 def scorecard():

@@ -4,27 +4,27 @@
 <div class="container">
     <div class="main-hero" style="margin-top: 120px; margin-bottom: 72px;">
         <h1 style="font-family:'Roboto','Arial',sans-serif;font-size:3.5rem;font-weight:700;line-height:1.08;letter-spacing:-.01em;margin-bottom:0.5em;">
-            <span style="color:#4285f4;display:block;">Welcome to the Insurance</span>
-            <span style="color:#34a853;display:block;">Portal</span>
+            <span style="color:#4285f4;display:block;">{{ translations.get("Welcome to the Insurance", "Welcome to the Insurance") }}</span>
+            <span style="color:#34a853;display:block;">{{ translations.get("Portal", "Portal") }}</span>
         </h1>
         <div class="subheadline" style="font-family:'Roboto','Arial',sans-serif;font-size:1.5rem;color:#444;font-weight:400;line-height:1.4;margin-bottom:2.8rem;max-width:600px;margin-left:auto;margin-right:auto;">
-            Compare, analyze, and choose the best health insurance policies for you and your family.
+            {{ translations.get("Compare, analyze, and choose the best health insurance policies for you and your family.", "Compare, analyze, and choose the best health insurance policies for you and your family.") }}
         </div>
         <div style="display:flex;justify-content:center;gap:18px;margin-bottom:3.2rem;">
-            <a href="/scorecard" class="action-btn">Go to Scorecard</a>
-            <a href="/compare" class="action-btn outline">Compare Policies</a>
+            <a href="/scorecard?lang={{ lang }}" class="action-btn">{{ translations.get("Go to Scorecard", "Go to Scorecard") }}</a>
+            <a href="/compare?lang={{ lang }}" class="action-btn outline">{{ translations.get("Compare Policies", "Compare Policies") }}</a>
         </div>
     </div>
     <div class="card bg-white rounded-lg shadow p-6 mt-8" style="font-family:'Roboto','Arial',sans-serif;font-size:1.13rem;line-height:1.6;">
-        <h2 style="font-size:1.25rem;font-weight:700;color:#222;margin-bottom:1.2rem;text-align:left;">Best Health Insurance Plans in India 2025</h2>
+        <h2 style="font-size:1.25rem;font-weight:700;color:#222;margin-bottom:1.2rem;text-align:left;">{{ translations.get("Best Health Insurance Plans in India 2025", "Best Health Insurance Plans in India 2025") }}</h2>
         <table class="min-w-full border border-gray-200 rounded-lg shadow text-base" style="font-size:1.08rem;">
             <thead>
                 <tr class="bg-gray-100">
-                    <th class="p-4 text-left">Top Health Plans</th>
-                    <th class="p-4 text-center">Insurer Rating</th>
-                    <th class="p-4 text-center">Feature Rating</th>
-                    <th class="p-4 text-center">Affordability</th>
-                    <th class="p-4 text-center">Final Rating</th>
+                    <th class="p-4 text-left">{{ translations.get("Top Health Plans", "Top Health Plans") }}</th>
+                    <th class="p-4 text-center">{{ translations.get("Insurer Rating", "Insurer Rating") }}</th>
+                    <th class="p-4 text-center">{{ translations.get("Feature Rating", "Feature Rating") }}</th>
+                    <th class="p-4 text-center">{{ translations.get("Affordability", "Affordability") }}</th>
+                    <th class="p-4 text-center">{{ translations.get("Final Rating", "Final Rating") }}</th>
                 </tr>
             </thead>
             <tbody>
