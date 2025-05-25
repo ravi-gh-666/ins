@@ -31,6 +31,17 @@ function renderScorecard(data) {
         }
         return `<span class='tag ${c}' style='margin-left:8px;'>${tagText}</span>`;
     }
+    function featureYoutubeEmbed(feature) {
+        if (feature.youtube_video) {
+            const videoId = feature.youtube_video.split('youtu.be/').pop();
+            return `<div class="flex-shrink-0 flex items-center justify-center w-full md:w-[360px] mt-4 md:mt-0">
+                <div style="background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.07); width:100%; max-width:360px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+                    <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video" frameborder="0" allowfullscreen style="width:100%; height:100%; border:none; border-radius:12px;"></iframe>
+                </div>
+            </div>`;
+        }
+        return '';
+    }
     let html = `
     <div class='card bg-white rounded-lg shadow p-6'>
         <div class='flex flex-col md:flex-row gap-6 items-stretch'>
@@ -58,9 +69,9 @@ function renderScorecard(data) {
     <div class='card bg-white rounded-lg shadow p-6 mt-6'>
         <h2 style='font-size:0.85rem;letter-spacing:0.08em;font-weight:500;color:#5f6368;text-transform:uppercase;margin-bottom:0.5rem;'>Policy Features</h2>
         <h3 style='font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;'>Mandatory Features</h3>
-        ${(d.mandatory_features||[]).map(f=>`<div class='card bg-gray-50 rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row gap-6 items-stretch'><div class='flex-1 flex flex-col justify-center'><div class='feature-title flex items-center text-base font-semibold mb-2'><span class='material-icons feature-icon text-blue-700 mr-2'>verified_user</span>${f.FeatureName}</div><p class='mb-1'><strong>Offered:</strong> <span class='tag ${f.FeatureOffered=="Yes"?"green":(f.FeatureOffered=="No"?"red":"orange")}' style='margin-left:8px;'>${f.FeatureOffered}</span></p><div class='explanation text-gray-700 mb-1'>${f.Explanation||''}</div><div class='details text-gray-600 mb-1'><strong>Details:</strong> ${f.Details||''}</div><div class='why-matters text-blue-700 italic mb-1'><strong>Why this matters:</strong> ${f.why_matters||''}</div><div class='caveats text-red-600 mb-1'><strong>Caveats:</strong> ${f.Caveats||''}</div></div></div>`).join('')}
+        ${(d.mandatory_features||[]).map(f=>`<div class='card bg-gray-50 rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row gap-6 items-stretch'><div class='flex-1 flex flex-col justify-center'><div class='feature-title flex items-center text-base font-semibold mb-2'><span class='material-icons feature-icon text-blue-700 mr-2'>verified_user</span>${f.FeatureName}</div><p class='mb-1'><strong>Offered:</strong> <span class='tag ${f.FeatureOffered=="Yes"?"green":(f.FeatureOffered=="No"?"red":"orange")}' style='margin-left:8px;'>${f.FeatureOffered}</span></p><div class='explanation text-gray-700 mb-1'>${f.Explanation||''}</div><div class='details text-gray-600 mb-1'><strong>Details:</strong> ${f.Details||''}</div><div class='why-matters text-blue-700 italic mb-1'><strong>Why this matters:</strong> ${f.why_matters||''}</div><div class='caveats text-red-600 mb-1'><strong>Caveats:</strong> ${f.Caveats||''}</div></div>${featureYoutubeEmbed(f)}</div>`).join('')}
         <h3 style='font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;'>Good To Have Features</h3>
-        ${(d.good_features||[]).map(f=>`<div class='card bg-gray-50 rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row gap-6 items-stretch'><div class='flex-1 flex flex-col justify-center'><div class='feature-title flex items-center text-base font-semibold mb-2'><span class='material-icons feature-icon text-teal-600 mr-2'>star_rate</span>${f.FeatureName}</div><p class='mb-1'><strong>Offered:</strong> <span class='tag ${f.FeatureOffered=="Yes"?"green":(f.FeatureOffered=="No"?"red":"orange")}' style='margin-left:8px;'>${f.FeatureOffered}</span></p><div class='explanation text-gray-700 mb-1'>${f.Explanation||''}</div><div class='details text-gray-600 mb-1'><strong>Details:</strong> ${f.Details||''}</div><div class='why-matters text-blue-700 italic mb-1'><strong>Why this matters:</strong> ${f.why_matters||''}</div><div class='caveats text-red-600 mb-1'><strong>Caveats:</strong> ${f.Caveats||''}</div></div></div>`).join('')}
+        ${(d.good_features||[]).map(f=>`<div class='card bg-gray-50 rounded-lg shadow-sm p-4 mb-4 flex flex-col md:flex-row gap-6 items-stretch'><div class='flex-1 flex flex-col justify-center'><div class='feature-title flex items-center text-base font-semibold mb-2'><span class='material-icons feature-icon text-teal-600 mr-2'>star_rate</span>${f.FeatureName}</div><p class='mb-1'><strong>Offered:</strong> <span class='tag ${f.FeatureOffered=="Yes"?"green":(f.FeatureOffered=="No"?"red":"orange")}' style='margin-left:8px;'>${f.FeatureOffered}</span></p><div class='explanation text-gray-700 mb-1'>${f.Explanation||''}</div><div class='details text-gray-600 mb-1'><strong>Details:</strong> ${f.Details||''}</div><div class='why-matters text-blue-700 italic mb-1'><strong>Why this matters:</strong> ${f.why_matters||''}</div><div class='caveats text-red-600 mb-1'><strong>Caveats:</strong> ${f.Caveats||''}</div></div>${featureYoutubeEmbed(f)}</div>`).join('')}
         <button class='action-btn'>Get Quote</button>
     </div>`;
     return html;
