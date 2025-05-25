@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const insurerSelect = document.getElementById('insurer');
     const policySelect = document.getElementById('policy');
-    function updatePolicies(selectedPolicy) {
+    const selectedPolicy = policySelect.getAttribute('data-selected');
+    insurerSelect.addEventListener('change', function() {
         fetch(`/api/policies/${insurerSelect.value}`)
             .then(res => res.json())
             .then(policies => {
@@ -16,14 +17,5 @@ document.addEventListener('DOMContentLoaded', function() {
                     policySelect.appendChild(opt);
                 });
             });
-    }
-    // On page load, ensure the correct policy is selected
-    const selectedPolicy = policySelect.getAttribute('data-selected');
-    if (insurerSelect && policySelect) {
-        insurerSelect.addEventListener('change', function() {
-            updatePolicies();
-        });
-        // If you want to ensure the correct policy is selected on load (e.g. after POST)
-        updatePolicies(selectedPolicy);
-    }
+    });
 });
