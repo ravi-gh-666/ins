@@ -33,9 +33,9 @@
         </div>
     </form>
     {% if policy_data['InsurerDetails'] %}
-    <div style="margin-bottom: 2.5rem;">
+    <div id="scorecard-table" tabindex="-1" style="margin-bottom: 2.5rem;">
         <div class="flex flex-col md:flex-row gap-6 items-stretch">
-            <div class="bg-white rounded-xl shadow p-6 flex flex-col justify-center" style="flex-basis:80%;flex-grow:1;max-width:80%;">
+            <div class="flex flex-col justify-center p-6" style="flex-basis:80%;flex-grow:1;max-width:80%;">
                 <h4 style="font-size:1.13rem;font-weight:600;color:#222;margin-bottom:0.7rem;text-align:left;">Insurer Scores</h4>
                 <div style="font-size:1rem;color:#222;margin-bottom:1.2em;line-height:1.7;text-align:left;">
                     <strong>Insurer:</strong> {{ policy_data['InsurerDetails']['Insurer'] }}
@@ -62,7 +62,7 @@
                 </p>
             </div>
             {% if scores %}
-            <div class="bg-white rounded-xl shadow p-6 flex flex-col justify-center items-center" style="flex-basis:20%;flex-grow:0;max-width:20%;min-width:180px;">
+            <div class="flex flex-col justify-center items-center p-6" style="flex-basis:20%;flex-grow:0;max-width:20%;min-width:180px;">
                 <h4 style="font-size:1.13rem;font-weight:600;color:#222;margin-bottom:0.7rem;text-align:left;">Policy Scores</h4>
                 <div style="font-size:1.08rem;color:#222;margin-bottom:1.2em;text-align:left;">
                     <strong>Policy:</strong> {{ policy_data['InsurerDetails']['InsurancePolicy'] }}

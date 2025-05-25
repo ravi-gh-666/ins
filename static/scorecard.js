@@ -18,4 +18,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
     });
+
+    // Focus and scroll to scorecard table if present
+    var scorecardTable = document.getElementById('scorecard-table');
+    if (scorecardTable) {
+        scorecardTable.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scorecardTable.focus();
+    }
 });
