@@ -77,7 +77,13 @@ def get_popular_comparisons():
 def home():
     lang = request.args.get('lang', 'en')
     translations = {}
-    if lang == 'kn':
+    if lang == 'hi':
+        try:
+            with open(os.path.join(app.root_path, 'static', 'translations_hi.json'), encoding='utf-8') as f:
+                translations = json.load(f)
+        except Exception as e:
+            print(f"[DEBUG] Could not load Hindi translations: {e}")
+    elif lang == 'kn':
         try:
             with open(os.path.join(app.root_path, 'static', 'translations_kn.json'), encoding='utf-8') as f:
                 translations = json.load(f)

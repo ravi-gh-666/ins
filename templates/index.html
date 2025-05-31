@@ -79,6 +79,9 @@
     {% endfor %}
     <div id="scorecard-section" style="display:none; margin-top: 48px;"></div>
 </div>
-<!-- Move JS to static/index.js and load it externally for CSP compliance -->
+<script>
+  window.TRANSLATIONS = {{ translations|tojson }};
+  window.LANG = "{{ lang }}";
+</script>
 <script src="{{ url_for('static', filename='index.js') }}"></script>
 {% endblock %}
