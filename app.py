@@ -125,7 +125,7 @@ def scorecard():
             }
 
         policy_data = {
-            "InsurerDetails": json.loads(policy_row["details"]) if policy_row else {},
+            "InsurerDetails": json.loads(policy_row["details"]) if policy_row and policy_row["details"] else {},
             "PolicyFeatures": [dict(f) for f in features]
         }
         for f in policy_data["PolicyFeatures"]:
