@@ -35,7 +35,7 @@
     {% if policy_data['InsurerDetails'] %}
     <div id="scorecard-table" tabindex="-1" style="margin-bottom: 2.5rem;">
         <div class="flex flex-col md:flex-row gap-6 items-stretch">
-            <div class="flex flex-col justify-center p-6" style="flex-basis:80%;flex-grow:1;max-width:80%;">
+            <div class="flex flex-col justify-center p-6" style="flex-basis:33%;flex-grow:1;max-width:33%;">
                 <h4 style="font-size:1.13rem;font-weight:600;color:#222;margin-bottom:0.7rem;text-align:left;">Insurer Scores</h4>
                 <div style="font-size:1rem;color:#222;margin-bottom:1.2em;line-height:1.7;text-align:left;">
                     <strong>Insurer:</strong> {{ policy_data['InsurerDetails']['Insurer'] }}
@@ -62,7 +62,7 @@
                 </p>
             </div>
             {% if scores %}
-            <div class="flex flex-col justify-center items-center p-6" style="flex-basis:20%;flex-grow:0;max-width:20%;min-width:180px;">
+            <div class="flex flex-col justify-center items-center p-6" style="flex-basis:33%;flex-grow:1;max-width:33%;min-width:180px;">
                 <h4 style="font-size:1.13rem;font-weight:600;color:#222;margin-bottom:0.7rem;text-align:left;">Policy Scores</h4>
                 <div style="font-size:1.08rem;color:#222;margin-bottom:1.2em;text-align:left;">
                     <strong>Policy:</strong> {{ policy_data['InsurerDetails']['InsurancePolicy'] }}
@@ -85,6 +85,26 @@
             {% endif %}
         </div>
     </div>
+    {% if policy_data.Pros or policy_data.Cons %}
+    <div class="flex flex-col md:flex-row gap-6 items-stretch mb-8">
+        <div class="flex-1 bg-green-50 rounded-lg p-6">
+            <h4 class="font-bold text-green-700 mb-2">Pros</h4>
+            <ul>
+                {% for pro in policy_data.Pros %}
+                <li>✔️ {{ pro }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="flex-1 bg-red-50 rounded-lg p-6">
+            <h4 class="font-bold text-red-700 mb-2">Cons</h4>
+            <ul>
+                {% for con in policy_data.Cons %}
+                <li>❌ {{ con }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
     <div style="margin-bottom: 2.5rem;">
         <h2 style="font-size:0.85rem;letter-spacing:0.08em;font-weight:500;color:#5f6368;text-transform:uppercase;margin-bottom:0.5rem;">Policy Features</h2>
         <h3 style="font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;">Mandatory Features</h3>

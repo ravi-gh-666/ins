@@ -126,7 +126,9 @@ def scorecard():
 
         policy_data = {
             "InsurerDetails": json.loads(policy_row["details"]) if policy_row and policy_row["details"] else {},
-            "PolicyFeatures": [dict(f) for f in features]
+            "PolicyFeatures": [dict(f) for f in features],
+            "Pros": json.loads(policy_row["pros"]) if policy_row and policy_row["pros"] else [],
+            "Cons": json.loads(policy_row["cons"]) if policy_row and policy_row["cons"] else []
         }
         for f in policy_data["PolicyFeatures"]:
             f["FeatureName"] = f["name"]
@@ -290,7 +292,9 @@ def api_policy(policy_id):
         features = conn.execute("SELECT * FROM feature WHERE policy_id=?", (policy_id,)).fetchall()
         policy_data = {
             "InsurerDetails": json.loads(policy_row["details"]),
-            "PolicyFeatures": [dict(f) for f in features]
+            "PolicyFeatures": [dict(f) for f in features],
+            "Pros": json.loads(policy_row["pros"]) if policy_row["pros"] else [],
+            "Cons": json.loads(policy_row["cons"]) if policy_row["cons"] else []
         }
         return jsonify(policy_data)
 
@@ -313,7 +317,9 @@ def api_scorecard_by_name():
         }
         policy_data = {
             "InsurerDetails": json.loads(policy_row["details"]) if policy_row and policy_row["details"] else {},
-            "PolicyFeatures": [dict(f) for f in features]
+            "PolicyFeatures": [dict(f) for f in features],
+            "Pros": json.loads(policy_row["pros"]) if policy_row and policy_row["pros"] else [],
+            "Cons": json.loads(policy_row["cons"]) if policy_row and policy_row["cons"] else []
         }
         for f in policy_data["PolicyFeatures"]:
             f["FeatureName"] = f["name"]
@@ -398,4 +404,4 @@ def blog_image(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
