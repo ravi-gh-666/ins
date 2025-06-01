@@ -21,10 +21,10 @@
             <thead>
                 <tr class="bg-gray-100">
                     <th class="p-4 text-left">{{ translations.get("Top Health Plans", "Top Health Plans") }}</th>
+                    <th class="p-4 text-center">{{ translations.get("Final Rating", "Final Rating") }}</th>
                     <th class="p-4 text-center">{{ translations.get("Insurer Rating", "Insurer Rating") }}</th>
                     <th class="p-4 text-center">{{ translations.get("Feature Rating", "Feature Rating") }}</th>
                     <th class="p-4 text-center">{{ translations.get("Affordability", "Affordability") }}</th>
-                    <th class="p-4 text-center">{{ translations.get("Final Rating", "Final Rating") }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,10 +43,12 @@
                         </div>
                         {% endif %}
                     </td>
+                    <td class="p-4 text-center font-bold text-xl bg-yellow-100 rounded shadow" style="color:#d97706;">
+                        {{ score_ring(plan['overall_score']) }}
+                    </td>
                     <td class="text-center">{{ score_ring(plan['insurer_rating']) }}</td>
                     <td class="text-center">{{ score_ring(plan['feature_rating']) }}</td>
                     <td class="text-center">{{ score_ring(plan['affordability_rating']) }}</td>
-                    <td class="text-center">{{ score_ring(plan['overall_score']) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
