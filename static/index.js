@@ -71,6 +71,22 @@ function renderScorecard(data) {
             </div>
         </div>
     </div>
+    ${((d.policy_data.Pros && d.policy_data.Pros.length) || (d.policy_data.Cons && d.policy_data.Cons.length)) ? `
+    <div class='flex flex-col md:flex-row gap-6 items-stretch mb-8 mt-6'>
+        <div class='flex-1 bg-green-50 rounded-lg p-6'>
+            <h4 class='font-bold text-green-700 mb-2'>${tr("Pros")}</h4>
+            <ul>
+                ${(d.policy_data.Pros||[]).map(pro=>`<li>✔️ ${pro}</li>`).join('')}
+            </ul>
+        </div>
+        <div class='flex-1 bg-red-50 rounded-lg p-6'>
+            <h4 class='font-bold text-red-700 mb-2'>${tr("Cons")}</h4>
+            <ul>
+                ${(d.policy_data.Cons||[]).map(con=>`<li>❌ ${con}</li>`).join('')}
+            </ul>
+        </div>
+    </div>
+    ` : ''}
     <div class='card bg-white rounded-lg shadow p-6 mt-6'>
         <h2 style='font-size:0.85rem;letter-spacing:0.08em;font-weight:500;color:#5f6368;text-transform:uppercase;margin-bottom:0.5rem;'>${tr("Policy Features")}</h2>
         <h3 style='font-size:2rem;font-weight:400;color:#202124;margin-bottom:1.2rem;'>${tr("Mandatory Features")}</h3>
