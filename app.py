@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_from_directory
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_from_directory, make_response
 import sqlite3
 import json
 from flask_wtf import FlaskForm, CSRFProtect
@@ -115,6 +115,7 @@ def scorecard():
 
         policy_row = conn.execute("SELECT * FROM policy WHERE id=?", (selected_policy_id,)).fetchone() if selected_policy_id else None
         features = conn.execute("SELECT * FROM feature WHERE policy_id=?", (selected_policy_id,)).fetchall() if selected_policy_id else []
+        addons = conn.execute("SELECT * FROM addon WHERE policy_id=?", (selected_policy_id,)).fetchall() if selected_policy_id else []
         scores = None
         if policy_row:
             scores = {
@@ -128,7 +129,8 @@ def scorecard():
             "InsurerDetails": json.loads(policy_row["details"]) if policy_row and policy_row["details"] else {},
             "PolicyFeatures": [dict(f) for f in features],
             "Pros": json.loads(policy_row["pros"]) if policy_row and policy_row["pros"] else [],
-            "Cons": json.loads(policy_row["cons"]) if policy_row and policy_row["cons"] else []
+            "Cons": json.loads(policy_row["cons"]) if policy_row and policy_row["cons"] else [],
+            "Addons": [dict(a) for a in addons]
         }
         for f in policy_data["PolicyFeatures"]:
             f["FeatureName"] = f["name"]
@@ -139,6 +141,7 @@ def scorecard():
 
         mandatory_features = [f for f in policy_data["PolicyFeatures"] if f.get("category", "Good To Have") == "Mandatory"]
         good_features = [f for f in policy_data["PolicyFeatures"] if f.get("category", "Good To Have") != "Mandatory"]
+        addons = policy_data["Addons"]
 
     form.insurer.data = int(selected_insurer_id) if selected_insurer_id else None
     form.policy.data = int(selected_policy_id) if selected_policy_id else None
@@ -152,6 +155,7 @@ def scorecard():
         get_score_color=get_score_color,
         mandatory_features=mandatory_features,
         good_features=good_features,
+        addons=addons,
         scores=scores,
         form=form
     )
@@ -309,17 +313,13 @@ def api_scorecard_by_name():
         if not policy_row:
             return jsonify({'error': 'Policy not found'}), 404
         features = conn.execute("SELECT * FROM feature WHERE policy_id=?", (policy_row['id'],)).fetchall()
-        scores = {
-            'overall_score': policy_row['overall_score'],
-            'insurer_rating': policy_row['insurer_rating'],
-            'feature_rating': policy_row['feature_rating'],
-            'affordability_rating': policy_row['affordability_rating']
-        }
+        addons = conn.execute("SELECT * FROM addon WHERE policy_id=?", (policy_row['id'],)).fetchall()
         policy_data = {
             "InsurerDetails": json.loads(policy_row["details"]) if policy_row and policy_row["details"] else {},
             "PolicyFeatures": [dict(f) for f in features],
             "Pros": json.loads(policy_row["pros"]) if policy_row and policy_row["pros"] else [],
-            "Cons": json.loads(policy_row["cons"]) if policy_row and policy_row["cons"] else []
+            "Cons": json.loads(policy_row["cons"]) if policy_row and policy_row["cons"] else [],
+            "Addons": [dict(a) for a in addons]
         }
         for f in policy_data["PolicyFeatures"]:
             f["FeatureName"] = f["name"]
@@ -329,6 +329,12 @@ def api_scorecard_by_name():
             f["Caveats"] = f["caveats"]
         mandatory_features = [f for f in policy_data["PolicyFeatures"] if f.get("category", "Good To Have") == "Mandatory"]
         good_features = [f for f in policy_data["PolicyFeatures"] if f.get("category", "Good To Have") != "Mandatory"]
+        scores = {
+            'overall_score': policy_row['overall_score'],
+            'insurer_rating': policy_row['insurer_rating'],
+            'feature_rating': policy_row['feature_rating'],
+            'affordability_rating': policy_row['affordability_rating']
+        }
         return jsonify({
             'policy_data': policy_data,
             'scores': scores,
@@ -402,6 +408,18 @@ def blog_edit(blog_id):
 @app.route('/static/blog_images/<filename>')
 def blog_image(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/static/translations.js')
+def translations_js():
+    translations = request.args.get('translations')
+    lang = request.args.get('lang')
+    # If not provided via query, fallback to context (homepage)
+    if not translations or not lang:
+        translations = request.args.get('translations') or globals().get('translations', {})
+        lang = request.args.get('lang') or globals().get('lang', 'en')
+    response = make_response(render_template('translations.js', translations=translations, lang=lang))
+    response.headers['Content-Type'] = 'application/javascript'
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

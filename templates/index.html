@@ -43,8 +43,10 @@
                         </div>
                         {% endif %}
                     </td>
-                    <td class="p-4 text-center font-bold text-xl bg-yellow-100 rounded shadow" style="color:#d97706;">
+                    <td class="p-4 text-center bg-yellow-100 rounded shadow" style="color:#d97706;">
+                      <div style="display:flex;justify-content:center;align-items:center;">
                         {{ score_ring(plan['overall_score']) }}
+                      </div>
                     </td>
                     <td class="text-center">{{ score_ring(plan['insurer_rating']) }}</td>
                     <td class="text-center">{{ score_ring(plan['feature_rating']) }}</td>
@@ -81,9 +83,6 @@
     {% endfor %}
     <div id="scorecard-section" style="display:none; margin-top: 48px;"></div>
 </div>
-<script>
-  window.TRANSLATIONS = {{ translations|tojson }};
-  window.LANG = "{{ lang }}";
-</script>
+<script src="{{ url_for('static', filename='translations.js') }}"></script>
 <script src="{{ url_for('static', filename='index.js') }}"></script>
 {% endblock %}

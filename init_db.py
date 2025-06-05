@@ -42,6 +42,16 @@ CREATE TABLE IF NOT EXISTS feature (
     FOREIGN KEY(policy_id) REFERENCES policy(id)
 )
 """)
+c.execute("""
+CREATE TABLE IF NOT EXISTS addon (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    policy_id INTEGER,
+    name TEXT,
+    description TEXT,
+    details TEXT,
+    FOREIGN KEY(policy_id) REFERENCES policy(id)
+);
+""")
 
 c.execute("CREATE INDEX IF NOT EXISTS idx_policy_insurer_id ON policy(insurer_id)")
 c.execute("CREATE INDEX IF NOT EXISTS idx_feature_policy_id ON feature(policy_id)")
