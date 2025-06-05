@@ -65,7 +65,10 @@
                     <div class="feature-title flex items-center text-base font-semibold mb-2">
                         {{ feature.FeatureName }}
                     </div>
-                    <div class="explanation text-gray-700 mb-1">{{ feature.Explanation }}</div>
+                    {% if feature.Explanation %}<div class="explanation text-gray-700 mb-1">{{ feature.Explanation }}</div>{% endif %}
+                    {% if feature.Details %}<div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature.Details }}</div>{% endif %}
+                    {% if feature.why_matters %}<div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature.why_matters }}</div>{% endif %}
+                    {% if feature.Caveats %}<div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature.Caveats }}</div>{% endif %}
                     {% if feature.youtube_video %}
                     <div style="background:#fff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.07); width:100%; max-width:360px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; margin-top:12px;">
                         <iframe
@@ -78,6 +81,18 @@
                     {% endif %}
                 </div>
             {% endfor %}
+            {% if plan.addons %}
+                <h3 style="font-size:1.15rem;font-weight:600;color:#222;margin-bottom:1.2rem;">Additional Features</h3>
+                {% for addon in plan.addons %}
+                    <div class="mb-4">
+                        <div class="feature-title flex items-center text-base font-semibold mb-2">
+                            {{ addon.name }}
+                        </div>
+                        <div class="explanation text-gray-700 mb-1">{{ addon.description }}</div>
+                        {% if addon.details %}<div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ addon.details }}</div>{% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
         {% endif %}
     {% endfor %}

@@ -116,10 +116,10 @@
                         {{ feature['FeatureName'] }}
                     </div>
                     <p class="mb-1"><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }} ml-2">{{ feature['FeatureOffered'] }}</span></p>
-                    <div class="explanation text-gray-700 mb-1">{{ feature['Explanation'] }}</div>
-                    <div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature['Details'] }}</div>
-                    <div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
-                    <div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
+                    {% if feature['Explanation'] %}<div class="explanation text-gray-700 mb-1">{{ feature['Explanation'] }}</div>{% endif %}
+                    {% if feature['Details'] %}<div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature['Details'] }}</div>{% endif %}
+                    {% if feature['why_matters'] %}<div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>{% endif %}
+                    {% if feature['Caveats'] %}<div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>{% endif %}
                 </div>
                 {% if feature.youtube_video %}
                 <div class="flex-shrink-0 flex items-center justify-center w-full md:w-[360px] mt-4 md:mt-0">
@@ -144,10 +144,10 @@
                         {{ feature['FeatureName'] }}
                     </div>
                     <p class="mb-1"><strong>Offered:</strong> <span class="tag {{ get_score_color(feature['FeatureOffered']) }} ml-2">{{ feature['FeatureOffered'] }}</span></p>
-                    <div class="explanation text-gray-700 mb-1">{{ feature['Explanation'] }}</div>
-                    <div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature['Details'] }}</div>
-                    <div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>
-                    <div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>
+                    {% if feature['Explanation'] %}<div class="explanation text-gray-700 mb-1">{{ feature['Explanation'] }}</div>{% endif %}
+                    {% if feature['Details'] %}<div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ feature['Details'] }}</div>{% endif %}
+                    {% if feature['why_matters'] %}<div class="why-matters text-blue-700 italic mb-1"><strong>Why this matters:</strong> {{ feature['why_matters'] }}</div>{% endif %}
+                    {% if feature['Caveats'] %}<div class="caveats text-red-600 mb-1"><strong>Caveats:</strong> {{ feature['Caveats'] }}</div>{% endif %}
                 </div>
                 {% if feature.youtube_video %}
                 <div class="flex-shrink-0 flex items-center justify-center w-full md:w-[360px] mt-4 md:mt-0">
@@ -172,7 +172,7 @@
                         {{ addon['name'] }}
                     </div>
                     <div class="explanation text-gray-700 mb-1">{{ addon['description'] }}</div>
-                    <div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ addon['details'] }}</div>
+                    {% if addon['details'] %}<div class="details text-gray-600 mb-1"><strong>Details:</strong> {{ addon['details'] }}</div>{% endif %}
                 </div>
             </div>
         {% endfor %}
