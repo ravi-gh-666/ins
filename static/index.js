@@ -116,3 +116,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+document.addEventListener('DOMContentLoaded', function() {
+    var rows = document.querySelectorAll('.top-plan-row');
+    var docSections = document.querySelectorAll('.policy-docs-section');
+    rows.forEach(function(row) {
+        row.addEventListener('click', function() {
+            var docId = row.getAttribute('data-doc-id');
+            docSections.forEach(function(sec) {
+                if (sec.getAttribute('data-doc-id') === docId) {
+                    sec.style.display = '';
+                    sec.scrollIntoView({behavior: 'smooth', block: 'center'});
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+        });
+    });
+});

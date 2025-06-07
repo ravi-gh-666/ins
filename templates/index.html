@@ -29,7 +29,7 @@
             </thead>
             <tbody>
                 {% for plan in top_plans %}
-                <tr class="border-b border-gray-100 top-plan-row cursor-pointer" data-insurer="{{ plan['insurer'] }}" data-policy="{{ plan['name'] }}">
+                <tr class="border-b border-gray-100 top-plan-row cursor-pointer" data-insurer="{{ plan['insurer'] }}" data-policy="{{ plan['name'] }}" data-doc-id="{{ loop.index }}">
                     <td class="p-4 text-left font-semibold">
                         {{ plan['name'] }}<br><span class="text-base text-gray-500">{{ plan['insurer'] }}</span>
                         {% if plan.youtube_video %}
@@ -93,50 +93,45 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            {% if plan.insurer and plan.name %}
-            <div class="card bg-white rounded-lg shadow p-6 mt-6 mb-8">
-                <h3 style="font-size:1.5rem;font-weight:600;color:#202124;margin-bottom:1.2rem;">Policy Documents</h3>
-                <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-                    <label for="policy-doc-lang-{{ loop.index }}" class="font-semibold mr-2">Language:</label>
-                    <select id="policy-doc-lang-{{ loop.index }}" class="google-select" style="width:auto;display:inline;">
-                        <option value="en">English</option>
-                        <option value="hi">हिन्दी</option>
-                        <option value="kn">ಕನ್ನಡ</option>
-                    </select>
+        </div>
+        {% endif %}
+        {% if plan.insurer and plan.name %}
+        <div class="card bg-white rounded-lg shadow p-6 mt-6 mb-8 policy-docs-section" id="policy-docs-{{ loop.index }}" data-policy-insurer="{{ plan.insurer }}" data-policy-name="{{ plan.name }}" data-doc-id="{{ loop.index }}">
+            <h3 style="font-size:1.5rem;font-weight:600;color:#202124;margin-bottom:1.2rem;">Policy Documents</h3>
+            <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+                <label for="policy-doc-lang-{{ loop.index }}" class="font-semibold mr-2">Language:</label>
+                <select id="policy-doc-lang-{{ loop.index }}" class="google-select policy-doc-lang" style="width:auto;display:inline;">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="kn">ಕನ್ನಡ</option>
+                </select>
+            </div>
+            <div id="policy-doc-links-{{ loop.index }}" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                <div class="flex items-center justify-between border-b pb-2 mb-2">
+                    <span>Prospectus</span>
+                    <a class="doc-link flex items-center justify-center" id="prospectus-link-{{ loop.index }}" href="#" target="_blank" download>
+                        <span class="material-icons" style="background:#e6faf2;border-radius:50%;padding:8px;color:#1db954;">download</span>
+                    </a>
                 </div>
-                <div id="policy-doc-links-{{ loop.index }}" class="flex flex-col gap-2">
-                    <a class="doc-link" id="prospectus-link-{{ loop.index }}" href="#" target="_blank" download>Prospectus</a>
-                    <a class="doc-link" id="policywordings-link-{{ loop.index }}" href="#" target="_blank" download>Policy Wordings</a>
-                    <a class="doc-link" id="brochure-link-{{ loop.index }}" href="#" target="_blank" download>Brochure</a>
-                    <a class="doc-link" id="networklist-link-{{ loop.index }}" href="#" target="_blank" download>Network List</a>
+                <div class="flex items-center justify-between border-b pb-2 mb-2">
+                    <span>Policy Wordings</span>
+                    <a class="doc-link flex items-center justify-center" id="policywordings-link-{{ loop.index }}" href="#" target="_blank" download>
+                        <span class="material-icons" style="background:#e6faf2;border-radius:50%;padding:8px;color:#1db954;">download</span>
+                    </a>
+                </div>
+                <div class="flex items-center justify-between border-b pb-2 mb-2">
+                    <span>Brochure</span>
+                    <a class="doc-link flex items-center justify-center" id="brochure-link-{{ loop.index }}" href="#" target="_blank" download>
+                        <span class="material-icons" style="background:#e6faf2;border-radius:50%;padding:8px;color:#1db954;">download</span>
+                    </a>
+                </div>
+                <div class="flex items-center justify-between border-b pb-2 mb-2">
+                    <span>Network list</span>
+                    <a class="doc-link flex items-center justify-center" id="networklist-link-{{ loop.index }}" href="#" target="_blank" download>
+                        <span class="material-icons" style="background:#e6faf2;border-radius:50%;padding:8px;color:#1db954;">download</span>
+                    </a>
                 </div>
             </div>
-            <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                function sanitize(str) {
-                    return str.replace(/[^a-zA-Z0-9]/g, '');
-                }
-                var insurer = sanitize("{{ plan.insurer|default('') }}");
-                var policy = sanitize("{{ plan.name|default('') }}");
-                var langSel = document.getElementById('policy-doc-lang-{{ loop.index }}');
-                var docLinks = {
-                    'prospectus-link-{{ loop.index }}': 'prospectus.pdf',
-                    'policywordings-link-{{ loop.index }}': 'policy_wordings.pdf',
-                    'brochure-link-{{ loop.index }}': 'brochure.pdf',
-                    'networklist-link-{{ loop.index }}': 'network_list.pdf'
-                };
-                function updateLinks() {
-                    var lang = langSel.value;
-                    Object.entries(docLinks).forEach(function([id, fname]) {
-                        var el = document.getElementById(id);
-                        el.href = `/static/policy_docs/${insurer}/${policy}/${lang}/${fname}`;
-                    });
-                }
-                langSel.addEventListener('change', updateLinks);
-                updateLinks();
-            });
-            </script>
-            {% endif %}
         </div>
         {% endif %}
     {% endfor %}
@@ -144,4 +139,5 @@
 </div>
 <script src="{{ url_for('static', filename='translations.js') }}"></script>
 <script src="{{ url_for('static', filename='index.js') }}"></script>
+<script src="{{ url_for('static', filename='index-policy-docs.js') }}"></script>
 {% endblock %}
