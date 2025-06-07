@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
+<div class="container" data-policy-insurer="{{ policy_data['InsurerDetails']['Insurer']|default('') }}" data-policy-name="{{ policy_data['InsurerDetails']['InsurancePolicy']|default('') }}">
     <div class="main-hero" style="margin-top: 120px; margin-bottom: 72px;">
         <h1 style="font-family:'Roboto','Arial',sans-serif;font-size:3.5rem;font-weight:700;line-height:1.08;letter-spacing:-.01em;margin-bottom:0.5em;">
             <span style="color:#4285f4;display:block;">Insurance Policy</span>
@@ -178,11 +178,48 @@
         {% endfor %}
         <button class="action-btn">Get Quote</button>
     </div>
+    <div class="card bg-white rounded-lg shadow p-6 mt-6 mb-8">
+        <h3 style="font-size:1.5rem;font-weight:600;color:#202124;margin-bottom:1.2rem;">Policy Documents</h3>
+        <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+            <label for="policy-doc-lang" class="font-semibold mr-2">Language:</label>
+            <select id="policy-doc-lang" class="google-select" style="width:auto;display:inline;">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+        </div>
+        <div id="policy-doc-links" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+            <div class="flex items-center justify-between border-b pb-2 mb-2">
+                <span>Prospectus</span>
+                <a class="doc-link flex items-center justify-center" id="prospectus-link" href="#" target="_blank" download>
+                    <span class="material-icons" style="background:#e6faf2;border-radius:50%;padding:8px;color:#1db954;">download</span>
+                </a>
+            </div>
+            <div class="flex items-center justify-between border-b pb-2 mb-2">
+                <span>Policy Wordings</span>
+                <a class="doc-link flex items-center justify-center" id="policywordings-link" href="#" target="_blank" download>
+                    <span class="material-icons" style="background:#e6faf2;border-radius:50%;padding:8px;color:#1db954;">download</span>
+                </a>
+            </div>
+            <div class="flex items-center justify-between border-b pb-2 mb-2">
+                <span>Brochure</span>
+                <a class="doc-link flex items-center justify-center" id="brochure-link" href="#" target="_blank" download>
+                    <span class="material-icons" style="background:#e6faf2;border-radius:50%;padding:8px;color:#1db954;">download</span>
+                </a>
+            </div>
+            <div class="flex items-center justify-between border-b pb-2 mb-2">
+                <span>Network list</span>
+                <a class="doc-link flex items-center justify-center" id="networklist-link" href="#" target="_blank" download>
+                    <span class="material-icons" style="background:#e6faf2;border-radius:50%;padding:8px;color:#1db954;">download</span>
+                </a>
+            </div>
+        </div>
+    </div>
     {% else %}
     <div class="card bg-red-50 text-center text-red-700 font-semibold py-8">
         No policy available for the selected insurer.
     </div>
     {% endif %}
 </div>
-<script src="{{ url_for('static', filename='scorecard.js') }}"></script>
+<script src="{{ url_for('static', filename='scorecard-docs.js') }}"></script>
 {% endblock %}
